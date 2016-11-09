@@ -460,7 +460,7 @@ class RotationMatrix(object):
 
         """
         matrix_array = self.matrix.reshape(9, )
-        return ("{ 19:15f}" * 9).format(*matrix_array)
+        return ("{: 19.15f}" * 9).format(*matrix_array)
 
     def __add__(self, augend):
         sum_matrix = augend.matrix.dot(self.matrix)
