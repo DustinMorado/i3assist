@@ -285,12 +285,12 @@ class RotationMatrix(object):
     def __init__(self, angles=None, unit="deg"):
         self.__matrix = None
         if angles is None:
-            angles = [0., 0., 0.]
+            angles = numpy.array([0., 0., 0.], numpy.float_)
 
         angles_array = numpy.array(angles, numpy.float_)
-        if unit == "deg":
+        if unit == "deg" and angles_array.size == 3:
             angles_array = numpy.radians(angles)
-        elif unit == "rad":
+        elif unit == "rad" or unit == "deg":
             pass
         else:
             raise ValueError("Unit must be either \"deg\" or \"rad\".")
@@ -313,7 +313,7 @@ class RotationMatrix(object):
 
     @matrix.setter
     def matrix(self, value):
-        if value.shape == (3,):
+        if value.size == 3:
             cos = numpy.cos(value)
             sin = numpy.sin(value)
             matrix = numpy.identity(3, numpy.float_)
@@ -340,7 +340,7 @@ class RotationMatrix(object):
             raise TypeError("Input must be array of angles or rotation matrix")
 
     def __str__(self):
-        return ("{: f} " * 8 + "{: f}").format(*self.matrix.reshape(9, ))
+        return ("{: f} " * 8 + "{: f}").format(*self.matrix.reshape(-1))
 
     def invert(self, inplace=False):
         """Returns rotation matrix describing opposite rotation.
@@ -403,28 +403,28 @@ class RotationMatrix(object):
             :obj:`i3assist.Euler`: Euler angle equivalent of rotation matrix
 
         """
-        abs_sine_theta = self.__matrix[0, 2] ** 2 + self.__matrix[1, 2] ** 2
-        abs_sine_theta = numpy.abs(abs_sine_theta)
+        abs_sine_theta = self.matrix[0, 2] ** 2 + self.matrix[1, 2] ** 2
+        abs_sine_theta = numpy.sqrt(abs_sine_theta)
 
         if not numpy.isclose(abs_sine_theta, 0.0):
-            phi = numpy.arctan2(self.__matrix[2, 0], -self.__matrix[2, 1])
-            psi = numpy.arctan2(self.__matrix[0, 2], self.__matrix[1, 2])
+            phi = numpy.arctan2(self.matrix[2, 0], -self.matrix[2, 1])
+            psi = numpy.arctan2(self.matrix[0, 2], self.matrix[1, 2])
 
             if numpy.isclose(numpy.sin(phi), 0.0):
-                theta_sign = self.__matrix[1, 2] / numpy.cos(psi)
+                theta_sign = self.matrix[1, 2] / numpy.cos(psi)
                 theta_sign = numpy.copysign(1.0, theta_sign)
             else:
-                theta_sign = self.__matrix[0, 2] / numpy.sin(psi)
+                theta_sign = self.matrix[0, 2] / numpy.sin(psi)
                 theta_sign = numpy.copysign(1.0, theta_sign)
 
             theta = numpy.arctan2(
-                theta_sign * abs_sine_theta, self.__matrix[2, 2])
+                theta_sign * abs_sine_theta, self.matrix[2, 2])
 
         else:
             psi = 0.0
-            phi = numpy.arctan2(-self.__matrix[1, 0], self.__matrix[0, 0])
+            phi = numpy.arctan2(-self.matrix[1, 0], self.matrix[0, 0])
 
-            if numpy.copysign(1.0, self.__matrix[2, 2]) > 0:
+            if numpy.copysign(1.0, self.matrix[2, 2]) > 0:
                 theta = 0.0
             else:
                 theta = numpy.pi
@@ -459,7 +459,7 @@ class RotationMatrix(object):
                 :obj:`str`: New I3 trf format string of rotation matrix
 
         """
-        matrix_array = self.matrix.reshape(9, )
+        matrix_array = self.matrix.reshape(-1)
         return ("{: 19.15f}" * 9).format(*matrix_array)
 
     def __add__(self, augend):
@@ -846,6 +846,30 @@ class Transform(object):
             result += ' {:d}'.format(self.class_number)
         return result
 
+    def to_pos(self):
+        """Return the equivalent old I3 position.
+
+        Returns:
+            :obj:`i3assist.Position`: Old I3 equivalent orientation.
+
+        """
+        result = '{:d} {:d} {:d} 0 '.format(*self.coordinates.reshape(-1))
+        inv_shifts = self.shifts * -1
+        result += '{:10.4f} {:10.4f} {:10.4f} '.format(*inv_shifts.reshape(-1))
+        inv_euler = self.rotation.invert().to_euler()
+        result += inv_euler.pos_string()
+        if self.class_number is not None:
+            result += ' {:d} '.format(self.class_number)
+        else:
+            result += ' 0 '
+
+        if self.score is not None:
+            result += ' {:10.5f} {:10.5f}'.format(self.score, 0.0)
+        else:
+            result += ' {:10.5f} {:10.5f}'.format(0.0, 0.0)
+
+        return Position(result)
+
     def copy(self):
         """Returns a copy of the transform."""
         return Transform(str(self))
@@ -1110,5 +1134,258 @@ class TransformList(object):
             trf_list = [trf.copy().scale(scale_factor) for trf in self]
             return TransformList(filename=self.filename,
                                  transforms=trf_list)
+
+class Position(object):
+    """A single particle transform in old I3.
+
+    The fields in the position are broken down as follows:
+        1. Particle's X coordinate in the tomogram *not used in alignment*
+        2. Particle's Y coordinate in the tomogram *not used in alignment*
+        3. Particle's Z coordinate in the tomogram *not used in alignment*
+        4. Particle's 4D index in the stack of particles
+        5. Particle's displacement (shift) along X from center of volume.
+        6. Particle's displacement (shift) along Y from center of volume.
+        7. Particle's displacement (shift) along Z from center of volume.
+        8. First euler angle in degrees about Z axis in range [-180, 180].
+        9. Second euler angle in degrees about X axis in range [0, 180].
+        10. Third euler angle in degrees about Z axis in range [-180, 180].
+        11. Class number the particle belongs to.
+        12. Max correlation coefficient between the particle and reference
+        13. Unknown reserved value.
+
+    Args:
+        positionLine (:obj:`str`): A string with the transform data.
+
+    """
+    def __init__(self, position_line):
+        position_contents = position_line.split()
+        self.__score = None
+        self.__class_number = None
+        self.__coordinates = None
+        self.__stack_index = None
+        self.__shifts = None
+        self.__rotation = None
+
+        if len(position_contents) < 13:
+            raise ValueError("Position line must have at least 13 fields.")
+
+        self.coordinates = [int(x) for x in position_contents[0:3]]
+        self.stack_index = position_contents[3]
+        self.shifts = [float(x) for x in position_contents[4:7]]
+        self.rotation = [float(x) for x in position_contents[7:10]]
+        self.class_number = int(position_contents[10])
+        self.score = position_contents[11]
+
+    @property
+    def coordinates(self):
+        """:obj:`list` of :obj:`int` Particles integer coordinates in tomogram.
+
+        Coordinates are stored here as column arrays to help with using them
+        with the rotation matrices.
+
+        Args:
+            value (:obj:`list` of :obj:`int`): List with 3 elements for
+                particles coordinates relative to the raw tomogram it's
+                extracted from.
+
+        """
+        return self.__coordinates
+
+    @coordinates.setter
+    def coordinates(self, value):
+        self.__coordinates = numpy.array(value, numpy.int_).reshape(3, 1)
+
+    @property
+    def stack_index(self):
+        """:obj:`int` Fourth dimension coordinate of particle in stack.
+
+        Old I3 used 4D stacks of particles as input. To keep the ability to
+        transform coordinates with rotation matrices and shifts, the fourth
+        dimension coordinate is given its own attribute.
+
+        Args:
+            value (:obj:`int`): Particles' fourth dimension coordinate
+
+        """
+        return self.__stack_index
+
+    @stack_index.setter
+    def stack_index(self, value):
+        self.__stack_index = int(value)
+
+    @property
+    def shifts(self):
+        """:obj:`list` of :obj:`float` Particle displacements from box center.
+
+        Displacements are stored here as column arrays to help with using them
+        with the rotation matrices. Again as for rotations, translations are
+        alibi translations of the coordinate system and not the actual points.
+
+        Args:
+            value (:obj:`list` of :obj:`float`): List with 3 elements for
+                particle's shifts relative to their box center.
+
+        """
+        return self.__shifts
+
+    @shifts.setter
+    def shifts(self, value):
+        self.__shifts = numpy.array(value, numpy.float_).reshape(3, 1)
+
+    @property
+    def rotation(self):
+        """:obj:`i3assist.Euler` Euler angles rotating reference to particle.
+
+        In Old I3 the rotations are opposite the ones given in New I3. This
+        could mean that previously alias rotations were used, but I think it is
+        more likely that the rotations just describe the rotation of the
+        reference.
+
+        Args:
+            value (:obj:`list` of :obj:`float`): Euler angles phi, theta, psi
+
+        """
+        return self.__rotation
+
+    @rotation.setter
+    def rotation(self, value):
+        self.__rotation = Euler(phi=value[0], theta=value[1], psi=value[2])
+
+    @property
+    def score(self):
+        """:obj:`float` Correlation score of particle alignment to reference.
+
+        Args:
+            value (:obj:`float`): Correlation score.
+
+        """
+        return self.__score
+
+    @score.setter
+    def score(self, value):
+        self.__score = float(value)
+
+    @property
+    def class_number(self):
+        """:obj:`int` Class number that the particle belongs to.
+
+        Args:
+            value (:obj:`int`): Particle Class.
+
+        """
+        return self.__class_number
+
+    @class_number.setter
+    def class_number(self, value):
+        self.__class_number = int(value)
+
+    def __str__(self):
+        result = '{:d} {:d} {:d} '.format(*self.coordinates.reshape(-1))
+        result += '{:d} '.format(self.stack_index)
+        result += '{:10.4f} {:10.4f} {:10.4f} '.format(
+            *self.shifts.reshape(-1))
+        result += self.rotation.pos_string()
+        result += ' {:d} '.format(self.class_number)
+        result += '{:10.5f} {:10.5f}'.format(self.score, 0.0)
+        return result
+
+    def copy(self):
+        """Returns a copy of the position."""
+        return Position(str(self))
+
+    def to_trf(self):
+        """Returns the equivalent new I3 transform.
+
+        Returns:
+           :obj:`i3assist.Transform`: New I3 equivalent orientation.
+
+        """
+        result = 'SUBSET '
+        result += '{:d} {:d} {:d} '.format(*self.coordinates.reshape(-1))
+        inv_shifts = self.shifts * -1
+        result += '{: 19.14f} {: 19.14f} {: 19.14f} '.format(
+            *inv_shifts.reshape(-1))
+        inv_rotmat = self.rotation.to_matrix().invert()
+        result += inv_rotmat.trf_string()
+        result += ' {: 14.10f} '.format(self.score)
+        result += ' {:d}'.format(self.class_number)
+        return Transform(result)
+
+class PositionList(object):
+    """Describes a full position file as a list of Positions.
+
+    Refer to the documentation for Position objects
+
+    Args:
+        filename (:obj:`str`): Filename of pos file.
+        positions (:obj:`list` of :obj:`i3assist.Position`): List of
+            positions.
+
+    """
+    def __init__(self, filename='', positions=None):
+        self.__filename = None
+        self.filename = filename
+        self.__positions = None
+        self.positions = positions
+
+    @property
+    def filename(self):
+        """Filename associated with position list.
+
+        Args:
+            value (:obj:`str`): Filename of pos file.
+
+        """
+        return self.__filename
+
+    @filename.setter
+    def filename(self, value):
+        self.__filename = str(value)
+
+    @property
+    def positions(self):
+        """List of Position objects.
+
+        Args:
+            value (:obj:`list` of :obj:`i3assist.Position`): List of
+                positions.
+
+        """
+        return self.__positions
+
+    @positions.setter
+    def positions(self, value):
+        self.__positions = value
+
+    def from_file(self, filename):
+        """Loads list of positions from a trf file.
+
+        Args:
+            filename (:obj:`str`): Filename of pos file.
+
+        """
+        with open(filename) as position_file:
+            self.positions = [Position(pos) for pos in position_file]
+        self.filename = filename
+
+    def __len__(self):
+        return len(self.positions)
+
+    def __iter__(self):
+        return iter(self.positions)
+
+    def __getitem__(self, key):
+        return self.positions[key]
+
+    def to_file(self, filename):
+        """Writes out a Position list to a pos file.
+
+        Args:
+            filename (:obj:`str`): Name of file to write to.
+
+        """
+        with open(filename, 'w') as position_file:
+            for pos in self.positions:
+                position_file.write(str(pos) + '\n')
 
 # vim: textwidth=80 tabstop=8 expandtab shiftwidth=4 softtabstop=4:
