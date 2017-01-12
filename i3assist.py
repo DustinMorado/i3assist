@@ -330,9 +330,10 @@ class RotationMatrix(object):
         elif value.size == 9:
             matrix = numpy.array(value, numpy.float_).reshape(3, 3)
             if not numpy.allclose(
-                    matrix.dot(matrix.T), numpy.identity(3, numpy.float_)):
+                    matrix.dot(matrix.T), numpy.identity(3, numpy.float_),
+                    atol=1e-05):
                 raise ValueError("Given matrix is not orthonormal.")
-            elif not numpy.isclose(numpy.linalg.det(matrix), 1.0):
+            elif not numpy.isclose(numpy.linalg.det(matrix), 1.0, atol=1e-05):
                 raise ValueError("Given matrix is not a proper rotation.")
             else:
                 self.__matrix = matrix
@@ -406,11 +407,11 @@ class RotationMatrix(object):
         abs_sine_theta = self.matrix[0, 2] ** 2 + self.matrix[1, 2] ** 2
         abs_sine_theta = numpy.sqrt(abs_sine_theta)
 
-        if not numpy.isclose(abs_sine_theta, 0.0):
+        if not numpy.isclose(abs_sine_theta, 0.0, atol=1e-05):
             phi = numpy.arctan2(self.matrix[2, 0], -self.matrix[2, 1])
             psi = numpy.arctan2(self.matrix[0, 2], self.matrix[1, 2])
 
-            if numpy.isclose(numpy.sin(phi), 0.0):
+            if numpy.isclose(numpy.sin(phi), 0.0, atol=1e-05):
                 theta_sign = self.matrix[1, 2] / numpy.cos(psi)
                 theta_sign = numpy.copysign(1.0, theta_sign)
             else:
