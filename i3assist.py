@@ -411,7 +411,7 @@ class RotationMatrix(object):
             phi = numpy.arctan2(self.matrix[2, 0], -self.matrix[2, 1])
             psi = numpy.arctan2(self.matrix[0, 2], self.matrix[1, 2])
 
-            if numpy.isclose(numpy.sin(phi), 0.0, atol=1e-05):
+            if numpy.isclose(numpy.sin(psi), 0.0, atol=1e-05):
                 theta_sign = self.matrix[1, 2] / numpy.cos(psi)
                 theta_sign = numpy.copysign(1.0, theta_sign)
             else:
