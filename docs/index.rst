@@ -6,15 +6,23 @@
 Welcome to i3assist's documentation!
 ====================================
 
+.. include:: ../README.rst
+
 Contents:
 
 .. toctree::
    :maxdepth: 2
 
-   includeme.rst
-   modules.rst
-   i3assist.rst
+   modules
 
+User Guides for learing I3
+==========================
+
+.. toctree::
+   :maxdepth: 1
+   
+   guides/basic
+ 
 
 Indices and tables
 ==================

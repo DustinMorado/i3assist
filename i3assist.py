@@ -966,7 +966,7 @@ class TransformList(object):
             transforms.
 
     """
-    def __init__(self, filename='', transforms=None):
+    def __init__(self, filename='', transforms=[]):
         self.__filename = None
         self.filename = filename
         self.__transforms = None
@@ -1020,6 +1020,15 @@ class TransformList(object):
 
     def __getitem__(self, key):
         return self.transforms[key]
+
+    def append(self, transform):
+        """Adds a transform to the transform list.
+
+        Args:
+            transform (:obj:`i3assist.Transform`): Transform to add to list.
+
+        """
+        self.transforms.append(transform)
 
     def sort_by_score(self, inplace=False):
         """Sorts a transform list by correlation coefficient.
