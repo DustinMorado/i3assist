@@ -1,0 +1,1594 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>i3assist &mdash; i3assist 0.0.1 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="i3assist 0.0.1 documentation" href="../index.html"/>
+        <link rel="up" title="Module code" href="index.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> i3assist
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">i3assist</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../guides/basic.html">Basic Subtomogram Averaging with I3</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">i3assist</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="index.html">Module code</a> &raquo;</li>
+      
+    <li>i3assist</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for i3assist</h1><div class="highlight"><pre>
+<span></span><span class="c1">#. -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;A module to help using I3 for sub-tomogram averaging.</span>
+
+<span class="sd">Written By Dustin Reed Morado</span>
+<span class="sd">Last updated 04.11.2016</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span><span class="p">,</span> <span class="n">division</span>
+<span class="kn">import</span> <span class="nn">numpy</span>
+<span class="kn">import</span> <span class="nn">numpy.linalg</span>
+
+<div class="viewcode-block" id="Euler"><a class="viewcode-back" href="../stubs/i3assist.Euler.html#i3assist.Euler">[docs]</a><span class="k">class</span> <span class="nc">Euler</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Describes a particle&#39;s orientation using ZXZ extrinsic euler angles.</span>
+
+<span class="sd">    The first rotation (phi) is about the z-axis (z).</span>
+<span class="sd">    The second rotation (theta) is about the new x-axis (x&#39;).</span>
+<span class="sd">    The third rotation (psi) is about the new z-axis (z&#39;&#39;) after the second</span>
+<span class="sd">    rotation.</span>
+
+<span class="sd">    All rotations are of the coordinate axes and not of point coordinates.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        phi (:obj:`float`, optional): First rotation about the z-axis (z).</span>
+<span class="sd">        theta (:obj:`float`, optional): Second rotation about the new x-axis</span>
+<span class="sd">            (x&#39;).</span>
+<span class="sd">        psi (:obj:`float`, optional): Third rotation about the new z-axis</span>
+<span class="sd">            (z&#39;&#39;).</span>
+<span class="sd">        unit (:obj:`str`, optional): Whether rotations are in degrees &quot;deg&quot; or</span>
+<span class="sd">            radians &quot;rad&quot;.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Euler.__init__"><a class="viewcode-back" href="../stubs/i3assist.Euler.html#i3assist.Euler.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">phi</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">theta</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">psi</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s2">&quot;deg&quot;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__unit</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">unit</span> <span class="o">=</span> <span class="n">unit</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__angles</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">angles</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">phi</span><span class="p">,</span> <span class="n">theta</span><span class="p">,</span> <span class="n">psi</span><span class="p">],</span> <span class="n">numpy</span><span class="o">.</span><span class="n">float_</span><span class="p">)</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">unit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;:obj:`str`: Describes the unit of rotations as degrees or radians.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            value (:obj:`str`): &quot;deg&quot; to set unit as degrees or &quot;rad&quot; to set</span>
+<span class="sd">                unit as radians.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__unit</span>
+
+    <span class="nd">@unit</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">unit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="o">==</span> <span class="s2">&quot;deg&quot;</span> <span class="ow">or</span> <span class="n">value</span> <span class="o">==</span> <span class="s2">&quot;rad&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__unit</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unit must be either </span><span class="se">\&quot;</span><span class="s2">deg</span><span class="se">\&quot;</span><span class="s2"> or </span><span class="se">\&quot;</span><span class="s2">rad</span><span class="se">\&quot;</span><span class="s2">.&quot;</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">angles</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;:obj:`list` of :obj:`float`: Array of rotations in order.</span>
+
+<span class="sd">        Array is in the order phi, theta, psi</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            value (:obj:`list` of :obj:`float`): List-type array of the three</span>
+<span class="sd">                rotations.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__angles</span>
+
+    <span class="nd">@angles</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">angles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="n">temp</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">float_</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__angles</span> <span class="o">=</span> <span class="n">temp</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">phi</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;:obj:`float`: First rotation about the z-axis (z).</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            value (:obj:`float`): New phi rotation.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__angles</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="nd">@phi</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">phi</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__angles</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">theta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;:obj:`float`: Second rotation about the new x-axis (x&#39;).</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            value (:obj:`float`): New theta rotation.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__angles</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="nd">@theta</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">theta</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__angles</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">psi</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;:obj:`float`: Third rotation about the new z-axis (z&quot;).</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            value (:obj:`float`): New psi rotation.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__angles</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+
+    <span class="nd">@psi</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">psi</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__angles</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+<div class="viewcode-block" id="Euler.copy"><a class="viewcode-back" href="../i3assist.html#i3assist.Euler.copy">[docs]</a>    <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns a copy of the euler object.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            :obj:`i3assist.Euler`: Copy of Euler object.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Euler</span><span class="p">(</span><span class="n">phi</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">phi</span><span class="p">,</span> <span class="n">theta</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">theta</span><span class="p">,</span> <span class="n">psi</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">psi</span><span class="p">,</span>
+                     <span class="n">unit</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">unit</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Euler.degrees"><a class="viewcode-back" href="../i3assist.html#i3assist.Euler.degrees">[docs]</a>    <span class="k">def</span> <span class="nf">degrees</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Converts Euler object to describe rotations in units of degrees.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            inplace (:obj:`boolean`, optional): If True conversion will be</span>
+<span class="sd">                done in-place.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            :obj:`i3assist.Euler`: Copy or self object with rotations in degree</span>
+<span class="sd">                units.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">inplace</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit</span> <span class="o">==</span> <span class="s2">&quot;rad&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">unit</span> <span class="o">=</span> <span class="s2">&quot;deg&quot;</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">angles</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">angles</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit</span> <span class="o">==</span> <span class="s2">&quot;rad&quot;</span><span class="p">:</span>
+                <span class="n">result</span><span class="o">.</span><span class="n">unit</span> <span class="o">=</span> <span class="s2">&quot;deg&quot;</span>
+                <span class="n">result</span><span class="o">.</span><span class="n">angles</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">angles</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">result</span></div>
+
+<div class="viewcode-block" id="Euler.radians"><a class="viewcode-back" href="../i3assist.html#i3assist.Euler.radians">[docs]</a>    <span class="k">def</span> <span class="nf">radians</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Converts Euler object to describe rotations in units of radians.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            inplace (:obj:`boolean`, optional): If True conversion will be done</span>
+<span class="sd">                in-place.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            :obj:`i3assist.Euler`: Copy or self object with rotations in radian</span>
+<span class="sd">                units.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">inplace</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit</span> <span class="o">==</span> <span class="s2">&quot;deg&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">unit</span> <span class="o">=</span> <span class="s2">&quot;rad&quot;</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">angles</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">angles</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">unit</span> <span class="o">==</span> <span class="s2">&quot;deg&quot;</span><span class="p">:</span>
+                <span class="n">result</span><span class="o">.</span><span class="n">unit</span> <span class="o">=</span> <span class="s2">&quot;rad&quot;</span>
+                <span class="n">result</span><span class="o">.</span><span class="n">angles</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">angles</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">result</span></div>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{: f}</span><span class="s2"> </span><span class="si">{: f}</span><span class="s2"> </span><span class="si">{: f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">angles</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Euler.pos_string"><a class="viewcode-back" href="../i3assist.html#i3assist.Euler.pos_string">[docs]</a>    <span class="k">def</span> <span class="nf">pos_string</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns string of angles in old I3 pos format.</span>
+
+<span class="sd">            Returns:</span>
+<span class="sd">                :obj:`str`: Old I3 pos format string of euler angles.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{: 10.4f}{: 10.4f}{: 10.4f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">angles</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Euler.to_matrix"><a class="viewcode-back" href="../i3assist.html#i3assist.Euler.to_matrix">[docs]</a>    <span class="k">def</span> <span class="nf">to_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the RotationMatrix object equivalent of Euler object.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            :obj:`i3assist.RotationMatrix`: Rotation matrix describing the</span>
+<span class="sd">                equivalent euler angles.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">RotationMatrix</span><span class="p">(</span><span class="n">angles</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">angles</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">unit</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Euler.trf_string"><a class="viewcode-back" href="../i3assist.html#i3assist.Euler.trf_string">[docs]</a>    <span class="k">def</span> <span class="nf">trf_string</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns string of angles in new I3 trf format.</span>
+
+<span class="sd">            Returns:</span>
+<span class="sd">                :obj:`str`: New I3 trf format string of rotation matrix</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_matrix</span><span class="p">()</span><span class="o">.</span><span class="n">trf_string</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="Euler.normalize"><a class="viewcode-back" href="../i3assist.html#i3assist.Euler.normalize">[docs]</a>    <span class="k">def</span> <span class="nf">normalize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns a copy of euler object with rotations in old I3 bounds.</span>
+
+<span class="sd">        Old I3 requires that euler angles be given within the bounds:</span>
+<span class="sd">        phi: -180 to 180</span>
+<span class="sd">        theta: 0 to 180</span>
+<span class="sd">        psi: -180 to 180</span>
+
+<span class="sd">        There are many equivalent euler angle formats and we can normalize the</span>
+<span class="sd">        angles using these identities, but these ranges correspond to the ranges</span>
+<span class="sd">        given by the default C math arc trig functions, which are used in going</span>
+<span class="sd">        from rotation matrix to Euler angles so we just convert to rotation</span>
+<span class="sd">        matrix and then back to Euler angles.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            inplace: If set to True the Euler angles will be changed in-place</span>
+<span class="sd">                instead of returning a copy.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            :obj:`i3assist.Euler`: Copy or self object with rotations</span>
+<span class="sd">                normalized to ranges required by old I3.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_matrix</span><span class="p">()</span><span class="o">.</span><span class="n">to_euler</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">unit</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">inplace</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">angles</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">angles</span>
+            <span class="k">del</span> <span class="n">result</span>
+            <span class="k">return</span> <span class="bp">self</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">result</span></div>
+
+<div class="viewcode-block" id="Euler.invert"><a class="viewcode-back" href="../i3assist.html#i3assist.Euler.invert">[docs]</a>    <span class="k">def</span> <span class="nf">invert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Returns a copy of euler object with inverted rotations.</span>
+
+<span class="sd">        Again we can simply take the negative of psi, theta, phi to invert the</span>
+<span class="sd">        rotatations but it is more theoretically clear to convert the angles to</span>
+<span class="sd">        a rotation matrix, transpose it, and convert it back to angles. We also</span>
+<span class="sd">        get the added benefit of normalizing the angles.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            inplace: If set to True the Euler angles will be changed in-place</span>
+<span class="sd">                instead of returning a copy.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            :obj:`i3assist.Euler`: Copy or self object describing the opposite</span>
+<span class="sd">                rotation.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_matrix</span><span class="p">()</span><span class="o">.</span><span class="n">invert</span><span class="p">()</span><span class="o">.</span><span class="n">to_euler</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">unit</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">inplace</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">angles</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">angles</span>
+            <span class="k">del</span> <span class="n">result</span>
+            <span class="k">return</span> <span class="bp">self</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">result</span></div>
+
+    <span class="k">def</span> <span class="nf">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">augend</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">augend</span><span class="p">,</span> <span class="n">Euler</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Augend must also be an Euler object instance.&quot;</span><span class="p">)</span>
+
+        <span class="n">addend_matrix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_matrix</span><span class="p">()</span>
+        <span class="n">augend_matrix</span> <span class="o">=</span> <span class="n">augend</span><span class="o">.</span><span class="n">to_matrix</span><span class="p">()</span>
+        <span class="n">sum_matrix</span> <span class="o">=</span> <span class="n">augend_matrix</span> <span class="o">+</span> <span class="n">addend_matrix</span>
+        <span class="k">return</span> <span class="n">sum_matrix</span><span class="o">.</span><span class="n">to_euler</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">unit</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="RotationMatrix"><a class="viewcode-back" href="../stubs/i3assist.RotationMatrix.html#i3assist.RotationMatrix">[docs]</a><span class="k">class</span> <span class="nc">RotationMatrix</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Describes a particle&#39;s orientation using ZXZ passive rotation matrix.</span>
+
+<span class="sd">    The rotation matrix is the composition of three rotations matrices with</span>
+<span class="sd">    the first and third being about the Z-axis and the second about the X-axis.</span>
+
+<span class="sd">    All rotations are passive (alias) transformations of the coordinate axes</span>
+<span class="sd">    and not of point coordinates (active / alibi).</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        angles (:obj:`list` of :obj:`float`, optional): Euler angles describing</span>
+<span class="sd">            the rotation.</span>
+<span class="sd">        unit (:obj:`str`, optional): Whether rotations are in degrees &quot;deg&quot; or</span>
+<span class="sd">            radians &quot;rad&quot;</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="RotationMatrix.__init__"><a class="viewcode-back" href="../stubs/i3assist.RotationMatrix.html#i3assist.RotationMatrix.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">angles</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s2">&quot;deg&quot;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__matrix</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">angles</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">angles</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">],</span> <span class="n">numpy</span><span class="o">.</span><span class="n">float_</span><span class="p">)</span>
+
+        <span class="n">angles_array</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">angles</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">float_</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">unit</span> <span class="o">==</span> <span class="s2">&quot;deg&quot;</span> <span class="ow">and</span> <span class="n">angles_array</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="n">angles_array</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">angles</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">unit</span> <span class="o">==</span> <span class="s2">&quot;rad&quot;</span> <span class="ow">or</span> <span class="n">unit</span> <span class="o">==</span> <span class="s2">&quot;deg&quot;</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unit must be either </span><span class="se">\&quot;</span><span class="s2">deg</span><span class="se">\&quot;</span><span class="s2"> or </span><span class="se">\&quot;</span><span class="s2">rad</span><span class="se">\&quot;</span><span class="s2">.&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">matrix</span> <span class="o">=</span> <span class="n">angles_array</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;:obj:`numpy.ndarray`: (3,3) matrix describing the rotation.</span>
+
+<span class="sd">        Matrix is ordered in the standard format with the first index</span>
+<span class="sd">        describing the row and the second index describing the column.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            value (:obj:`numpy.ndarray`): Euler angles in radians or Rotation</span>
+<span class="sd">                matrix.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__matrix</span>
+
+    <span class="nd">@matrix</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">value</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="n">cos</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="n">sin</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="n">matrix</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">float_</span><span class="p">)</span>
+            <span class="n">matrix</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">cos</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">cos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">sin</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">cos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">sin</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">matrix</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">cos</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">sin</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">sin</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">cos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">cos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">matrix</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">sin</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">sin</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">matrix</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">sin</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">cos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">cos</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">cos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">sin</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">matrix</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">sin</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">sin</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">cos</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">cos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">cos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">matrix</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">cos</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">sin</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">matrix</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">sin</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">sin</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">matrix</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">sin</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">cos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">matrix</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">cos</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__matrix</span> <span class="o">=</span> <span class="n">matrix</span>
+        <span class="k">elif</span> <span class="n">value</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">9</span><span class="p">:</span>
+            <span class="n">matrix</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">float_</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span>
+                    <span class="n">matrix</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">matrix</span><span class="o">.</span><span class="n">T</span><span class="p">),</span> <span class="n">numpy</span><span class="o">.</span><span class="n">identity</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">float_</span><span class="p">),</span>
+                    <span class="n">atol</span><span class="o">=</span><span class="mi">1</span><span class="n">e</span><span class="o">-</span><span class="mi">05</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Given matrix is not orthonormal.&quot;</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">det</span><span class="p">(</span><span class="n">matrix</span><span class="p">),</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mi">1</span><span class="n">e</span><span class="o">-</span><span class="mi">05</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Given matrix is not a proper rotation.&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__matrix</span> <span class="o">=</span> <span class="n">matrix</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Input must be array of angles or rotation matrix&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="s2">&quot;</span><span class="si">{: f}</span><span class="s2"> &quot;</span> <span class="o">*</span> <span class="mi">8</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">{: f}</span><span class="s2">&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">matrix</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+
+<div class="viewcode-block" id="RotationMatrix.invert"><a class="viewcode-back" href="../i3assist.html#i3assist.RotationMatrix.invert">[docs]</a>    <span class="k">def</span> <span class="nf">invert</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns rotation matrix describing opposite rotation.</span>
+
+<span class="sd">        Rotation matrices are orthogonal and hence their transpose is their</span>
+<span class="sd">        inverse.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            inplace (:obj:`boolean`, optional): If True the operation will be</span>
+<span class="sd">                done on the object in-place instead of returning a copy.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            :obj:`i3assist.RotationMatrix`: Copy or self object of the inverted</span>
+<span class="sd">                rotation matrix.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">inplace</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">matrix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">matrix</span><span class="o">.</span><span class="n">T</span>
+            <span class="k">return</span> <span class="bp">self</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">RotationMatrix</span><span class="p">()</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">matrix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">matrix</span><span class="o">.</span><span class="n">T</span>
+            <span class="k">return</span> <span class="n">result</span></div>
+
+<div class="viewcode-block" id="RotationMatrix.transpose"><a class="viewcode-back" href="../i3assist.html#i3assist.RotationMatrix.transpose">[docs]</a>    <span class="k">def</span> <span class="nf">transpose</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns rotation matrix describing opposite rotation.</span>
+
+<span class="sd">        Rotation matrices are orthogonal and hence their transpose is their</span>
+<span class="sd">        inverse.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            inplace (:obj:`boolean`, optional): If True the operation will be</span>
+<span class="sd">                done on the object in-place instead of returning a copy.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            :obj:`i3assist.RotationMatrix`: Copy or self object of the inverted</span>
+<span class="sd">                rotation matrix.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">inplace</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">matrix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">matrix</span><span class="o">.</span><span class="n">T</span>
+            <span class="k">return</span> <span class="bp">self</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">RotationMatrix</span><span class="p">()</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">matrix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">matrix</span><span class="o">.</span><span class="n">T</span>
+            <span class="k">return</span> <span class="n">result</span></div>
+
+<div class="viewcode-block" id="RotationMatrix.to_euler"><a class="viewcode-back" href="../i3assist.html#i3assist.RotationMatrix.to_euler">[docs]</a>    <span class="k">def</span> <span class="nf">to_euler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s2">&quot;deg&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Converts rotation matrix to equivalent euler angles.</span>
+
+<span class="sd">        Algorithm from Chapter 1 of &quot;Computational Methods for</span>
+<span class="sd">        Three-Dimensional Microscopy Reconstruction&quot; Ed. Joachim Frank, Gabor</span>
+<span class="sd">        Herman.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            unit (:obj:`str`, optional): Whether to return the Euler angles in</span>
+<span class="sd">                degrees or radians.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            :obj:`i3assist.Euler`: Euler angle equivalent of rotation matrix</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">abs_sine_theta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">matrix</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">matrix</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span>
+        <span class="n">abs_sine_theta</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">abs_sine_theta</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">numpy</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">abs_sine_theta</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mi">1</span><span class="n">e</span><span class="o">-</span><span class="mi">05</span><span class="p">):</span>
+            <span class="n">phi</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">matrix</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">matrix</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+            <span class="n">psi</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">matrix</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">matrix</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+
+            <span class="k">if</span> <span class="n">numpy</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">psi</span><span class="p">),</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mi">1</span><span class="n">e</span><span class="o">-</span><span class="mi">05</span><span class="p">):</span>
+                <span class="n">theta_sign</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">matrix</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">/</span> <span class="n">numpy</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">psi</span><span class="p">)</span>
+                <span class="n">theta_sign</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">copysign</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">theta_sign</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">theta_sign</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">matrix</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">/</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">psi</span><span class="p">)</span>
+                <span class="n">theta_sign</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">copysign</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">theta_sign</span><span class="p">)</span>
+
+            <span class="n">theta</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span>
+                <span class="n">theta_sign</span> <span class="o">*</span> <span class="n">abs_sine_theta</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">matrix</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">psi</span> <span class="o">=</span> <span class="mf">0.0</span>
+            <span class="n">phi</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">matrix</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">matrix</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+
+            <span class="k">if</span> <span class="n">numpy</span><span class="o">.</span><span class="n">copysign</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">matrix</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">theta</span> <span class="o">=</span> <span class="mf">0.0</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">theta</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">pi</span>
+
+        <span class="n">euler</span> <span class="o">=</span> <span class="n">Euler</span><span class="p">(</span><span class="n">phi</span><span class="o">=</span><span class="n">phi</span><span class="p">,</span> <span class="n">theta</span><span class="o">=</span><span class="n">theta</span><span class="p">,</span> <span class="n">psi</span><span class="o">=</span><span class="n">psi</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s2">&quot;rad&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">unit</span> <span class="o">==</span> <span class="s2">&quot;deg&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">euler</span><span class="o">.</span><span class="n">degrees</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">unit</span> <span class="o">==</span> <span class="s2">&quot;rad&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">euler</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unit must be either </span><span class="se">\&quot;</span><span class="s2">deg</span><span class="se">\&quot;</span><span class="s2"> or </span><span class="se">\&quot;</span><span class="s2">rad</span><span class="se">\&quot;</span><span class="s2">.&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="RotationMatrix.copy"><a class="viewcode-back" href="../i3assist.html#i3assist.RotationMatrix.copy">[docs]</a>    <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns a copy of the rotation matrix.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">RotationMatrix</span><span class="p">(</span><span class="n">angles</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">matrix</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s2">&quot;rad&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="RotationMatrix.pos_string"><a class="viewcode-back" href="../i3assist.html#i3assist.RotationMatrix.pos_string">[docs]</a>    <span class="k">def</span> <span class="nf">pos_string</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns string of angles in old I3 pos format.</span>
+
+<span class="sd">            Returns:</span>
+<span class="sd">                :obj:`str`: Old I3 pos format string of euler angles.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">euler</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">to_euler</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">euler</span><span class="o">.</span><span class="n">pos_string</span><span class="p">()</span></div>
+
+<div class="viewcode-block" id="RotationMatrix.trf_string"><a class="viewcode-back" href="../i3assist.html#i3assist.RotationMatrix.trf_string">[docs]</a>    <span class="k">def</span> <span class="nf">trf_string</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns string of angles in new I3 trf format.</span>
+
+<span class="sd">            Returns:</span>
+<span class="sd">                :obj:`str`: New I3 trf format string of rotation matrix</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">matrix_array</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">matrix</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="s2">&quot;</span><span class="si">{: 19.15f}</span><span class="s2">&quot;</span> <span class="o">*</span> <span class="mi">9</span><span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">*</span><span class="n">matrix_array</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">augend</span><span class="p">):</span>
+        <span class="n">sum_matrix</span> <span class="o">=</span> <span class="n">augend</span><span class="o">.</span><span class="n">matrix</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">matrix</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">RotationMatrix</span><span class="p">()</span>
+        <span class="n">result</span><span class="o">.</span><span class="n">matrix</span> <span class="o">=</span> <span class="n">sum_matrix</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+<div class="viewcode-block" id="GridSearch"><a class="viewcode-back" href="../stubs/i3assist.GridSearch.html#i3assist.GridSearch">[docs]</a><span class="k">class</span> <span class="nc">GridSearch</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Describes the local grid search implemented in new I3.</span>
+
+<span class="sd">    See the explanation in MRASRCH and the I3 subvolume tutorial for more</span>
+<span class="sd">    information on how the grid search is implemented. But overall the grid is</span>
+<span class="sd">    defined by four parameters: Nutation (theta) maximum and step and Spin</span>
+<span class="sd">    (psi) maximum and step. Finally there is a do_180 parameter to support the</span>
+<span class="sd">    old I3 eulerFG scripts, but this is not available in new I3.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        theta_max (:obj:`float`, optional): Maximum half-angle of a cone of</span>
+<span class="sd">            nutation about the north pole of the unit sphere.</span>
+<span class="sd">        theta_step (:obj:`float`, optional): Angular increment of nutation.</span>
+<span class="sd">        psi_max (:obj:`float`, optional): Maximum absolute angle of spin about</span>
+<span class="sd">            the orientation axis of the particle. Searched in both directions.</span>
+<span class="sd">        psi_step (:obj:`float`, optional): Angular increment of spin.</span>
+<span class="sd">        do_180 (:obj:`boolean`, optional): If True the spins opposite of the</span>
+<span class="sd">            current orientation&#39;s facing will also be searched.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="GridSearch.__init__"><a class="viewcode-back" href="../stubs/i3assist.GridSearch.html#i3assist.GridSearch.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">theta_max</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">theta_step</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">psi_max</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">psi_step</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+            <span class="n">do_180</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__theta_max</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__theta_step</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__psi_max</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__psi_step</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__do_180</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__rotations</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">theta_max</span> <span class="o">=</span> <span class="n">theta_max</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">theta_step</span> <span class="o">=</span> <span class="n">theta_step</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">psi_max</span> <span class="o">=</span> <span class="n">psi_max</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">psi_step</span> <span class="o">=</span> <span class="n">psi_step</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">do_180</span> <span class="o">=</span> <span class="n">do_180</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rotations</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">theta_max</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">theta_step</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">psi_max</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">psi_step</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">do_180</span><span class="p">)</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">rotations</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;:obj:`list` of :obj:`i3assist.Euler` Rotations searched in i3.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            params (:obj:`tuple` of :obj:`float` and :obj:`boolean`): A tuple</span>
+<span class="sd">                with theta_max, theta_step, psi_max, psi_step, and do_180.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__rotations</span>
+
+    <span class="nd">@rotations</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">rotations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+        <span class="n">theta_max</span><span class="p">,</span> <span class="n">theta_step</span><span class="p">,</span> <span class="n">psi_max</span><span class="p">,</span> <span class="n">psi_step</span><span class="p">,</span> <span class="n">do_180</span> <span class="o">=</span> <span class="n">params</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__rotations</span> <span class="o">=</span> <span class="p">[</span><span class="n">Euler</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="n">do_180</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__rotations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Euler</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mf">180.</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">psi_step</span> <span class="o">&gt;</span> <span class="mf">0.</span> <span class="ow">and</span> <span class="n">psi_max</span> <span class="o">&gt;</span> <span class="mf">0.</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">psi_deg</span> <span class="ow">in</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">psi_step</span><span class="p">,</span> <span class="n">psi_max</span><span class="p">,</span> <span class="n">psi_step</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__rotations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Euler</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="n">psi_deg</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__rotations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Euler</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="o">-</span><span class="n">psi_deg</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">do_180</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__rotations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Euler</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mi">180</span> <span class="o">+</span> <span class="n">psi_deg</span><span class="p">))</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__rotations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Euler</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mi">180</span> <span class="o">-</span> <span class="n">psi_deg</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="n">psi_max</span> <span class="o">&lt;</span> <span class="mi">180</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__rotations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Euler</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="n">psi_max</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__rotations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Euler</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="o">-</span><span class="n">psi_max</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">do_180</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__rotations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Euler</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mi">180</span> <span class="o">+</span> <span class="n">psi_max</span><span class="p">))</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__rotations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Euler</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">0.</span><span class="p">,</span> <span class="mi">180</span> <span class="o">-</span> <span class="n">psi_max</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">theta_step</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">theta_max</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">theta_deg</span> <span class="o">=</span> <span class="n">theta_step</span>
+            <span class="k">while</span> <span class="n">theta_deg</span> <span class="o">&lt;=</span> <span class="n">theta_max</span><span class="p">:</span>
+                <span class="n">theta_rad</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">theta_deg</span><span class="p">)</span>
+                <span class="n">phi_num</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta_rad</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mf">180.0</span> <span class="o">/</span> <span class="n">theta_step</span><span class="p">)</span>
+                <span class="n">phi_num</span> <span class="o">=</span> <span class="mi">4</span> <span class="k">if</span> <span class="n">phi_num</span> <span class="o">&lt;</span> <span class="mi">4</span> <span class="k">else</span> <span class="nb">int</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">phi_num</span><span class="p">))</span>
+
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">phi_num</span><span class="p">):</span>
+                    <span class="n">phi_deg</span> <span class="o">=</span> <span class="n">i</span> <span class="o">*</span> <span class="mf">360.0</span> <span class="o">/</span> <span class="n">phi_num</span>
+                    <span class="n">phi_rad</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">phi_deg</span><span class="p">)</span>
+                    <span class="n">psi_rad0</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span>
+                        <span class="o">-</span><span class="n">numpy</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">phi_rad</span><span class="p">),</span>
+                        <span class="n">numpy</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta_rad</span><span class="p">)</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">phi_rad</span><span class="p">))</span>
+                    <span class="n">psi_deg0</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">degrees</span><span class="p">(</span><span class="n">psi_rad0</span><span class="p">)</span>
+
+                    <span class="bp">self</span><span class="o">.</span><span class="n">__rotations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="n">Euler</span><span class="p">(</span><span class="n">phi_deg</span><span class="p">,</span> <span class="n">theta_deg</span><span class="p">,</span> <span class="n">psi_deg0</span><span class="p">))</span>
+                    <span class="k">if</span> <span class="n">do_180</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">__rotations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                            <span class="n">Euler</span><span class="p">(</span><span class="n">phi_deg</span><span class="p">,</span> <span class="n">theta_deg</span><span class="p">,</span> <span class="n">psi_deg0</span><span class="o">+</span><span class="mi">180</span><span class="p">))</span>
+
+                    <span class="k">if</span> <span class="n">psi_step</span> <span class="o">&gt;</span> <span class="mf">0.</span> <span class="ow">and</span> <span class="n">psi_max</span> <span class="o">&gt;</span> <span class="mf">0.</span><span class="p">:</span>
+                        <span class="k">for</span> <span class="n">psi_deg</span> <span class="ow">in</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span>
+                                <span class="n">psi_step</span><span class="p">,</span> <span class="n">psi_max</span><span class="p">,</span> <span class="n">psi_step</span><span class="p">):</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">__rotations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                                <span class="n">Euler</span><span class="p">(</span><span class="n">phi_deg</span><span class="p">,</span> <span class="n">theta_deg</span><span class="p">,</span> <span class="n">psi_deg0</span> <span class="o">+</span> <span class="n">psi_deg</span><span class="p">))</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">__rotations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                                <span class="n">Euler</span><span class="p">(</span><span class="n">phi_deg</span><span class="p">,</span> <span class="n">theta_deg</span><span class="p">,</span> <span class="n">psi_deg0</span> <span class="o">-</span> <span class="n">psi_deg</span><span class="p">))</span>
+                            <span class="k">if</span> <span class="n">do_180</span><span class="p">:</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">__rotations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                                    <span class="n">Euler</span><span class="p">(</span><span class="n">phi_deg</span><span class="p">,</span> <span class="n">theta_deg</span><span class="p">,</span>
+                                          <span class="mi">180</span> <span class="o">+</span> <span class="n">psi_deg0</span> <span class="o">+</span> <span class="n">psi_deg</span><span class="p">))</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">__rotations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                                    <span class="n">Euler</span><span class="p">(</span><span class="n">phi_deg</span><span class="p">,</span> <span class="n">theta_deg</span><span class="p">,</span>
+                                          <span class="mi">180</span> <span class="o">+</span> <span class="n">psi_deg0</span> <span class="o">-</span> <span class="n">psi_deg</span><span class="p">))</span>
+                        <span class="k">if</span> <span class="n">psi_max</span> <span class="o">&lt;</span> <span class="mi">180</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">__rotations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                                <span class="n">Euler</span><span class="p">(</span><span class="n">phi_deg</span><span class="p">,</span> <span class="n">theta_deg</span><span class="p">,</span> <span class="n">psi_deg0</span> <span class="o">+</span> <span class="n">psi_max</span><span class="p">))</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">__rotations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                                <span class="n">Euler</span><span class="p">(</span><span class="n">phi_deg</span><span class="p">,</span> <span class="n">theta_deg</span><span class="p">,</span> <span class="n">psi_deg0</span> <span class="o">-</span> <span class="n">psi_max</span><span class="p">))</span>
+                            <span class="k">if</span> <span class="n">do_180</span><span class="p">:</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">__rotations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                                    <span class="n">Euler</span><span class="p">(</span><span class="n">phi_deg</span><span class="p">,</span> <span class="n">theta_deg</span><span class="p">,</span>
+                                          <span class="mi">180</span> <span class="o">+</span> <span class="n">psi_deg0</span> <span class="o">+</span> <span class="n">psi_max</span><span class="p">))</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">__rotations</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                                    <span class="n">Euler</span><span class="p">(</span><span class="n">phi_deg</span><span class="p">,</span> <span class="n">theta_deg</span><span class="p">,</span>
+                                          <span class="mi">180</span> <span class="o">+</span> <span class="n">psi_deg0</span> <span class="o">-</span> <span class="n">psi_max</span><span class="p">))</span>
+                <span class="n">theta_deg</span> <span class="o">+=</span> <span class="n">theta_step</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">theta_max</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;:obj:`float` Max half-angle of nutation about the north pole.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            value (:obj:`float`): half-angle in the range 0 to 180.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__theta_max</span>
+
+    <span class="nd">@theta_max</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">theta_max</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Theta maximum cannot be less than zero.&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">value</span> <span class="o">&gt;</span> <span class="mi">180</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Theta maximum cannot be greater than 180.&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__theta_max</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rotations</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">rotations</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">theta_max</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">theta_step</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">psi_max</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">psi_step</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">do_180</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">theta_step</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;:obj:`float` Angular increment of nutation.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            value (:obj:`float`): Angular increment in the range 0 to 180.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__theta_step</span>
+
+    <span class="nd">@theta_step</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">theta_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Theta step cannot be less than zero.&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__theta_step</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rotations</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">rotations</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">theta_max</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">theta_step</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">psi_max</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">psi_step</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">do_180</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">psi_max</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;:obj:`float` Max absolute angle of spin about the particle z-axis.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            value (:obj:`float`): Max absolute spin angle in range 0 to 180.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__psi_max</span>
+
+    <span class="nd">@psi_max</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">psi_max</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Psi maximum cannot be less than zero.&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">value</span> <span class="o">&gt;</span> <span class="mi">180</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Psi maximum cannot be greater than 180 degrees.&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__psi_max</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rotations</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">rotations</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">theta_max</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">theta_step</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">psi_max</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">psi_step</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">do_180</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">psi_step</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;:obj:`float` Angular increment of spin.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            value (:obj:`float`): Spin angular increment in the range 0 to 180.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__psi_step</span>
+
+    <span class="nd">@psi_step</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">psi_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Psi step cannot be less than zero.&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__psi_step</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rotations</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">rotations</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">theta_max</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">theta_step</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">psi_max</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">psi_step</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">do_180</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">do_180</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;:obj:`boolean` Whether to search spins opposite particle facing.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            value (:obj:`bool`): True to search opposite facing spin angles.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__do_180</span>
+
+    <span class="nd">@do_180</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">do_180</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__do_180</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rotations</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rotations</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">theta_max</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">theta_step</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">psi_max</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">psi_step</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">do_180</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rotations</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rotations</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">rotations</span><span class="p">[</span><span class="n">key</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="Transform"><a class="viewcode-back" href="../stubs/i3assist.Transform.html#i3assist.Transform">[docs]</a><span class="k">class</span> <span class="nc">Transform</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A single particle transform in new I3.</span>
+
+<span class="sd">    For more information refer to the subvolume tutorial document for I3.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        transformLine (:obj:`str`): A string with the transform data.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Transform.__init__"><a class="viewcode-back" href="../stubs/i3assist.Transform.html#i3assist.Transform.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">transform_line</span><span class="p">):</span>
+        <span class="n">transform_contents</span> <span class="o">=</span> <span class="n">transform_line</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__score</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__class_number</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__subset</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__coordinates</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__shifts</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__rotation</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">transform_contents</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">16</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Transform line must have at least 16 fields.&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">transform_contents</span><span class="p">)</span> <span class="o">==</span> <span class="mi">16</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">score</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">class_number</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">transform_contents</span><span class="p">)</span> <span class="o">==</span> <span class="mi">17</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">score</span> <span class="o">=</span> <span class="n">transform_contents</span><span class="p">[</span><span class="mi">16</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">class_number</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">transform_contents</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">18</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">score</span> <span class="o">=</span> <span class="n">transform_contents</span><span class="p">[</span><span class="mi">16</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">class_number</span> <span class="o">=</span> <span class="n">transform_contents</span><span class="p">[</span><span class="mi">17</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">subset</span> <span class="o">=</span> <span class="n">transform_contents</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">transform_contents</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">4</span><span class="p">]]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shifts</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">transform_contents</span><span class="p">[</span><span class="mi">4</span><span class="p">:</span><span class="mi">7</span><span class="p">]]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rotation</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">transform_contents</span><span class="p">[</span><span class="mi">7</span><span class="p">:</span><span class="mi">16</span><span class="p">]]</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">subset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;:obj:`str` Subset identifier for particle.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            value (:obj:`str`): Subset name around 10 characters.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__subset</span>
+
+    <span class="nd">@subset</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">subset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__subset</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">coordinates</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;:obj:`list` of :obj:`int` Particles integer coordinates in tomogram.</span>
+
+<span class="sd">        Coordinates are stored here as column arrays to help with using them</span>
+<span class="sd">        with the rotation matrices.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            value (:obj:`list` of :obj:`int`): List with 3 elements for</span>
+<span class="sd">                particles coordinates relative to the tomogram map it&#39;s</span>
+<span class="sd">                extracted from.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__coordinates</span>
+
+    <span class="nd">@coordinates</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">coordinates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__coordinates</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">int_</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">shifts</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;:obj:`list` of :obj:`float` Particle displacements from coordinates.</span>
+
+<span class="sd">        Displacements are stored here as column arrays to help with using them</span>
+<span class="sd">        with the rotation matrices. Again as for rotations translations are</span>
+<span class="sd">        alibi translations of the coordinate system and not the actual points.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            value (:obj:`list&#39; of :obj`float`): List with 3 elements for</span>
+<span class="sd">                particles shifts relative to the center of the reference.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__shifts</span>
+
+    <span class="nd">@shifts</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">shifts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__shifts</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">float_</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">rotation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;:obj:`i3assist.RotationMatrix` Particles rotation matrix to orient.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            value (:obj:`list` of :obj:`float`): Rotation matrix.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__rotation</span>
+
+    <span class="nd">@rotation</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">rotation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__rotation</span> <span class="o">=</span> <span class="n">RotationMatrix</span><span class="p">(</span><span class="n">angles</span><span class="o">=</span><span class="n">value</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s2">&quot;rad&quot;</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">score</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;:obj:`float` Correlation score of particle alignment to reference.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            value (:obj:`float`): Correlation score.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__score</span>
+
+    <span class="nd">@score</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__score</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">class_number</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;:obj:`int` Class number that the particle belongs to.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            value (:obj:`int`): Particle Class.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__class_number</span>
+
+    <span class="nd">@class_number</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">class_number</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__class_number</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">subset</span>
+        <span class="n">result</span> <span class="o">+=</span> <span class="s1">&#39; </span><span class="si">{:d}</span><span class="s1"> </span><span class="si">{:d}</span><span class="s1"> </span><span class="si">{:d}</span><span class="s1"> &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span>
+        <span class="n">result</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="si">{: 19.14f}</span><span class="s1"> </span><span class="si">{: 19.14f}</span><span class="s1"> </span><span class="si">{: 19.14f}</span><span class="s1"> &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">shifts</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span>
+        <span class="n">result</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rotation</span><span class="o">.</span><span class="n">trf_string</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">score</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">+=</span> <span class="s1">&#39; </span><span class="si">{: 14.10f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">score</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_number</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">+=</span> <span class="s1">&#39; </span><span class="si">{:d}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">class_number</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span>
+
+<div class="viewcode-block" id="Transform.to_pos"><a class="viewcode-back" href="../i3assist.html#i3assist.Transform.to_pos">[docs]</a>    <span class="k">def</span> <span class="nf">to_pos</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the equivalent old I3 position.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            :obj:`i3assist.Position`: Old I3 equivalent orientation.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{:d}</span><span class="s1"> </span><span class="si">{:d}</span><span class="s1"> </span><span class="si">{:d}</span><span class="s1"> 0 &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">inv_shifts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shifts</span> <span class="o">*</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="n">result</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="si">{:10.4f}</span><span class="s1"> </span><span class="si">{:10.4f}</span><span class="s1"> </span><span class="si">{:10.4f}</span><span class="s1"> &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">*</span><span class="n">inv_shifts</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">inv_euler</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rotation</span><span class="o">.</span><span class="n">invert</span><span class="p">()</span><span class="o">.</span><span class="n">to_euler</span><span class="p">()</span>
+        <span class="n">result</span> <span class="o">+=</span> <span class="n">inv_euler</span><span class="o">.</span><span class="n">pos_string</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">class_number</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">+=</span> <span class="s1">&#39; </span><span class="si">{:d}</span><span class="s1"> &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">class_number</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">+=</span> <span class="s1">&#39; 0 &#39;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">score</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">+=</span> <span class="s1">&#39; </span><span class="si">{:10.5f}</span><span class="s1"> </span><span class="si">{:10.5f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">score</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">+=</span> <span class="s1">&#39; </span><span class="si">{:10.5f}</span><span class="s1"> </span><span class="si">{:10.5f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">Position</span><span class="p">(</span><span class="n">result</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Transform.copy"><a class="viewcode-back" href="../i3assist.html#i3assist.Transform.copy">[docs]</a>    <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns a copy of the transform.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Transform</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="Transform.scale"><a class="viewcode-back" href="../i3assist.html#i3assist.Transform.scale">[docs]</a>    <span class="k">def</span> <span class="nf">scale</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scale_factor</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Scale the transform to handle binning.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            scale_factor (:obj:`float`): Amount to scale transform by.</span>
+<span class="sd">            inplace: If True the operation will be done in-place and modify</span>
+<span class="sd">                the transform instead of returning a copy.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            :obj:`i3assist.Transform`: Copy or self scaled transform object.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">particle_center</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">shifts</span><span class="p">)</span> <span class="o">*</span> <span class="n">scale_factor</span>
+        <span class="n">new_shifts</span><span class="p">,</span> <span class="n">new_coordinates</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">modf</span><span class="p">(</span><span class="n">particle_center</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">inplace</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">shifts</span> <span class="o">=</span> <span class="n">new_shifts</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span> <span class="o">=</span> <span class="n">new_coordinates</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">int_</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">shifts</span> <span class="o">=</span> <span class="n">new_shifts</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">coordinates</span> <span class="o">=</span> <span class="n">new_coordinates</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">int_</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">result</span></div>
+
+<div class="viewcode-block" id="Transform.add_shift"><a class="viewcode-back" href="../i3assist.html#i3assist.Transform.add_shift">[docs]</a>    <span class="k">def</span> <span class="nf">add_shift</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shift_x</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">shift_y</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">shift_z</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Adjusts the particles defined center by an arbitrary vector.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            shift_x (:obj:`float`, optional): Amount to shift in x.</span>
+<span class="sd">            shift_y (:obj:`float`, optional): Amount to shift in y.</span>
+<span class="sd">            shift_z (:obj:`float`, optional): Amount to shift in z.</span>
+<span class="sd">            inplace (:obj:`float`, optional): If True the operation will be</span>
+<span class="sd">                done in-place and modify thet transform instead of returning a</span>
+<span class="sd">                copy.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            :obj:`i3assist.Transform`: Copy or self shifted transform object.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">reference_shift</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">shift_x</span><span class="p">,</span> <span class="n">shift_y</span><span class="p">,</span> <span class="n">shift_z</span><span class="p">],</span> <span class="n">numpy</span><span class="o">.</span><span class="n">float_</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">particle_center</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">shifts</span>
+        <span class="n">transform_matrix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rotation</span><span class="o">.</span><span class="n">invert</span><span class="p">()</span><span class="o">.</span><span class="n">matrix</span>
+        <span class="n">transformed_shift</span> <span class="o">=</span> <span class="n">transform_matrix</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">reference_shift</span><span class="p">)</span>
+        <span class="n">particle_center</span> <span class="o">+=</span> <span class="n">transformed_shift</span>
+        <span class="n">new_shifts</span><span class="p">,</span> <span class="n">new_coordinates</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">modf</span><span class="p">(</span><span class="n">particle_center</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">inplace</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">shifts</span> <span class="o">=</span> <span class="n">new_shifts</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span> <span class="o">=</span> <span class="n">new_coordinates</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">int_</span><span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">shifts</span> <span class="o">=</span> <span class="n">new_shifts</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">coordinates</span> <span class="o">=</span> <span class="n">new_coordinates</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">int_</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">result</span></div>
+
+<div class="viewcode-block" id="Transform.add_rotation"><a class="viewcode-back" href="../i3assist.html#i3assist.Transform.add_rotation">[docs]</a>    <span class="k">def</span> <span class="nf">add_rotation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rotation</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Adds a rotation in addition to particles current orientation.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            rotation (:obj:`i3assist.RotationMatrix`): Rotation to add.</span>
+<span class="sd">            inplace: If True the operation will be done in-place and modify</span>
+<span class="sd">                the transform instead of returning a copy.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            :obj:`i3assist.Transform`: Copy or self rotated transform object.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rotation</span><span class="p">,</span> <span class="n">RotationMatrix</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Rotation must be RotationMatrix type.&quot;</span><span class="p">)</span>
+        <span class="n">new_rotation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rotation</span> <span class="o">+</span> <span class="n">rotation</span>
+        <span class="k">if</span> <span class="n">inplace</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rotation</span> <span class="o">=</span> <span class="n">new_rotation</span><span class="o">.</span><span class="n">matrix</span>
+            <span class="k">return</span> <span class="bp">self</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">rotation</span> <span class="o">=</span> <span class="n">new_rotation</span><span class="o">.</span><span class="n">matrix</span>
+            <span class="k">return</span> <span class="n">result</span></div></div>
+
+<div class="viewcode-block" id="TransformList"><a class="viewcode-back" href="../stubs/i3assist.TransformList.html#i3assist.TransformList">[docs]</a><span class="k">class</span> <span class="nc">TransformList</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Describes a full transform file with as a list of Transforms.</span>
+
+<span class="sd">    For more information refer to the subvolume tutorial document for I3.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        filename (:obj:`str`): Filename of trf file.</span>
+<span class="sd">        transforms (:obj:`list` of :obj:`i3assist.Transform`): List of</span>
+<span class="sd">            transforms.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="TransformList.__init__"><a class="viewcode-back" href="../stubs/i3assist.TransformList.html#i3assist.TransformList.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">transforms</span><span class="o">=</span><span class="p">[]):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__filename</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="n">filename</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__transforms</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">transforms</span> <span class="o">=</span> <span class="n">transforms</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">filename</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Filename associated with transform list.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            value (:obj:`str`): Filename of trf file.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__filename</span>
+
+    <span class="nd">@filename</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">filename</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__filename</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">transforms</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;List of Transform objects.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            value (:obj:`list` of :obj:`i3assist.Transform`): List of</span>
+<span class="sd">                transforms.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__transforms</span>
+
+    <span class="nd">@transforms</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">transforms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__transforms</span> <span class="o">=</span> <span class="n">value</span>
+
+<div class="viewcode-block" id="TransformList.from_file"><a class="viewcode-back" href="../i3assist.html#i3assist.TransformList.from_file">[docs]</a>    <span class="k">def</span> <span class="nf">from_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Loads list of transforms from a trf file.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            filename (:obj:`str`): Filename of trf file.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="k">as</span> <span class="n">transform_file</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">transforms</span> <span class="o">=</span> <span class="p">[</span><span class="n">Transform</span><span class="p">(</span><span class="n">trf</span><span class="p">)</span> <span class="k">for</span> <span class="n">trf</span> <span class="ow">in</span> <span class="n">transform_file</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="n">filename</span></div>
+
+    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">transforms</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">transforms</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">transforms</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+<div class="viewcode-block" id="TransformList.append"><a class="viewcode-back" href="../i3assist.html#i3assist.TransformList.append">[docs]</a>    <span class="k">def</span> <span class="nf">append</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">transform</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Adds a transform to the transform list.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            transform (:obj:`i3assist.Transform`): Transform to add to list.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">transforms</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">transform</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TransformList.sort_by_score"><a class="viewcode-back" href="../i3assist.html#i3assist.TransformList.sort_by_score">[docs]</a>    <span class="k">def</span> <span class="nf">sort_by_score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Sorts a transform list by correlation coefficient.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            inplace: If True the list is not returned and the sorting is done</span>
+<span class="sd">                in-place. Otherwise a sorted copy is returned.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            :obj:`i3assist.TransformList`: Transform list sorted by score.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">score</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Transform list does not contain scores.&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">inplace</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">transforms</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">trf</span><span class="p">:</span> <span class="n">trf</span><span class="o">.</span><span class="n">score</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">sorted_transforms</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">transforms</span><span class="p">,</span>
+                                           <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">trf</span><span class="p">:</span> <span class="n">trf</span><span class="o">.</span><span class="n">score</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">TransformList</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span>
+                                     <span class="n">transforms</span><span class="o">=</span><span class="n">sorted_transforms</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TransformList.sort_by_class"><a class="viewcode-back" href="../i3assist.html#i3assist.TransformList.sort_by_class">[docs]</a>    <span class="k">def</span> <span class="nf">sort_by_class</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Sorts a transform list by class numbers.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            inplace: If True the list is not returned and the sorting is done</span>
+<span class="sd">                in-place. Otherwise a sorted copy is returned.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            :obj:`i3assist.TransformList`: Transform list sorted by class.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">classNumber</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Transform list does not contatin class numbers.&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">inplace</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">transforms</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">trf</span><span class="p">:</span> <span class="n">trf</span><span class="o">.</span><span class="n">class_number</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">sorted_transforms</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">transforms</span><span class="p">,</span>
+                                           <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">trf</span><span class="p">:</span> <span class="n">trf</span><span class="o">.</span><span class="n">class_number</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">TransformList</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span>
+                                     <span class="n">transforms</span><span class="o">=</span><span class="n">sorted_transforms</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TransformList.get_by_subset"><a class="viewcode-back" href="../i3assist.html#i3assist.TransformList.get_by_subset">[docs]</a>    <span class="k">def</span> <span class="nf">get_by_subset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subset</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Gets a subset of a transform list based on the subset field.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            subset (:obj:`str`): The subset field to search for.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            :obj:`i3assist.TransformList`: Subset of self that matches the.</span>
+<span class="sd">                subset requested.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">trf_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">trf</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">trf</span><span class="o">.</span><span class="n">subset</span> <span class="o">==</span> <span class="n">subset</span><span class="p">:</span>
+                <span class="n">trf_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">trf</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">TransformList</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span>
+                             <span class="n">transforms</span><span class="o">=</span><span class="n">trf_list</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TransformList.get_by_class"><a class="viewcode-back" href="../i3assist.html#i3assist.TransformList.get_by_class">[docs]</a>    <span class="k">def</span> <span class="nf">get_by_class</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">class_number</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Gets a subset of a transform list based on the class number.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            class_number (:obj:`int`): The class number to search for.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            :obj:`i3assist.TransformList`: Subset of self that matches the.</span>
+<span class="sd">                class number requested.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">class_number</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Transform list does not contatin class numbers.&quot;</span><span class="p">)</span>
+
+        <span class="n">trf_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">trf</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">trf</span><span class="o">.</span><span class="n">class_number</span> <span class="o">==</span> <span class="n">class_number</span><span class="p">:</span>
+                <span class="n">trf_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">trf</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">TransformList</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span>
+                             <span class="n">transforms</span><span class="o">=</span><span class="n">trf_list</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TransformList.to_file"><a class="viewcode-back" href="../i3assist.html#i3assist.TransformList.to_file">[docs]</a>    <span class="k">def</span> <span class="nf">to_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Writes out a Transform list to a trf file.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            filename (:obj:`str`): Name of file to write to.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">transform_file</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">trf</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">transforms</span><span class="p">:</span>
+                <span class="n">transform_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">trf</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TransformList.scale"><a class="viewcode-back" href="../i3assist.html#i3assist.TransformList.scale">[docs]</a>    <span class="k">def</span> <span class="nf">scale</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scale_factor</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Scales all of the transforms in a list.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            scale_factor (:obj:`float`): Amount which to scale the transforms.</span>
+<span class="sd">            inplace: If True, scaling will be done in-place instead of</span>
+<span class="sd">                returning a copy.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            :obj:`i3assist.TransformList`: Scaled transform list.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">inplace</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">trf</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
+                <span class="n">trf</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">scale_factor</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">trf_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">trf</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">scale_factor</span><span class="p">)</span> <span class="k">for</span> <span class="n">trf</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">TransformList</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">filename</span><span class="p">,</span>
+                                 <span class="n">transforms</span><span class="o">=</span><span class="n">trf_list</span><span class="p">)</span></div></div>
+
+<div class="viewcode-block" id="Position"><a class="viewcode-back" href="../stubs/i3assist.Position.html#i3assist.Position">[docs]</a><span class="k">class</span> <span class="nc">Position</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A single particle transform in old I3.</span>
+
+<span class="sd">    The fields in the position are broken down as follows:</span>
+<span class="sd">        1. Particle&#39;s X coordinate in the tomogram *not used in alignment*</span>
+<span class="sd">        2. Particle&#39;s Y coordinate in the tomogram *not used in alignment*</span>
+<span class="sd">        3. Particle&#39;s Z coordinate in the tomogram *not used in alignment*</span>
+<span class="sd">        4. Particle&#39;s 4D index in the stack of particles</span>
+<span class="sd">        5. Particle&#39;s displacement (shift) along X from center of volume.</span>
+<span class="sd">        6. Particle&#39;s displacement (shift) along Y from center of volume.</span>
+<span class="sd">        7. Particle&#39;s displacement (shift) along Z from center of volume.</span>
+<span class="sd">        8. First euler angle in degrees about Z axis in range [-180, 180].</span>
+<span class="sd">        9. Second euler angle in degrees about X axis in range [0, 180].</span>
+<span class="sd">        10. Third euler angle in degrees about Z axis in range [-180, 180].</span>
+<span class="sd">        11. Class number the particle belongs to.</span>
+<span class="sd">        12. Max correlation coefficient between the particle and reference</span>
+<span class="sd">        13. Unknown reserved value.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        positionLine (:obj:`str`): A string with the transform data.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Position.__init__"><a class="viewcode-back" href="../stubs/i3assist.Position.html#i3assist.Position.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position_line</span><span class="p">):</span>
+        <span class="n">position_contents</span> <span class="o">=</span> <span class="n">position_line</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__score</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__class_number</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__coordinates</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__stack_index</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__shifts</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__rotation</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">position_contents</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">13</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Position line must have at least 13 fields.&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">position_contents</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">]]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stack_index</span> <span class="o">=</span> <span class="n">position_contents</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shifts</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">position_contents</span><span class="p">[</span><span class="mi">4</span><span class="p">:</span><span class="mi">7</span><span class="p">]]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rotation</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">position_contents</span><span class="p">[</span><span class="mi">7</span><span class="p">:</span><span class="mi">10</span><span class="p">]]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">class_number</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">position_contents</span><span class="p">[</span><span class="mi">10</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">score</span> <span class="o">=</span> <span class="n">position_contents</span><span class="p">[</span><span class="mi">11</span><span class="p">]</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">coordinates</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;:obj:`list` of :obj:`int` Particles integer coordinates in tomogram.</span>
+
+<span class="sd">        Coordinates are stored here as column arrays to help with using them</span>
+<span class="sd">        with the rotation matrices.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            value (:obj:`list` of :obj:`int`): List with 3 elements for</span>
+<span class="sd">                particles coordinates relative to the raw tomogram it&#39;s</span>
+<span class="sd">                extracted from.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__coordinates</span>
+
+    <span class="nd">@coordinates</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">coordinates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__coordinates</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">int_</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">stack_index</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;:obj:`int` Fourth dimension coordinate of particle in stack.</span>
+
+<span class="sd">        Old I3 used 4D stacks of particles as input. To keep the ability to</span>
+<span class="sd">        transform coordinates with rotation matrices and shifts, the fourth</span>
+<span class="sd">        dimension coordinate is given its own attribute.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            value (:obj:`int`): Particles&#39; fourth dimension coordinate</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__stack_index</span>
+
+    <span class="nd">@stack_index</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">stack_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__stack_index</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">shifts</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;:obj:`list` of :obj:`float` Particle displacements from box center.</span>
+
+<span class="sd">        Displacements are stored here as column arrays to help with using them</span>
+<span class="sd">        with the rotation matrices. Again as for rotations, translations are</span>
+<span class="sd">        alibi translations of the coordinate system and not the actual points.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            value (:obj:`list` of :obj:`float`): List with 3 elements for</span>
+<span class="sd">                particle&#39;s shifts relative to their box center.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__shifts</span>
+
+    <span class="nd">@shifts</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">shifts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__shifts</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">numpy</span><span class="o">.</span><span class="n">float_</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">rotation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;:obj:`i3assist.Euler` Euler angles rotating reference to particle.</span>
+
+<span class="sd">        In Old I3 the rotations are opposite the ones given in New I3. This</span>
+<span class="sd">        could mean that previously alias rotations were used, but I think it is</span>
+<span class="sd">        more likely that the rotations just describe the rotation of the</span>
+<span class="sd">        reference.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            value (:obj:`list` of :obj:`float`): Euler angles phi, theta, psi</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__rotation</span>
+
+    <span class="nd">@rotation</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">rotation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__rotation</span> <span class="o">=</span> <span class="n">Euler</span><span class="p">(</span><span class="n">phi</span><span class="o">=</span><span class="n">value</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">theta</span><span class="o">=</span><span class="n">value</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">psi</span><span class="o">=</span><span class="n">value</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">score</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;:obj:`float` Correlation score of particle alignment to reference.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            value (:obj:`float`): Correlation score.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__score</span>
+
+    <span class="nd">@score</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">score</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__score</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">class_number</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;:obj:`int` Class number that the particle belongs to.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            value (:obj:`int`): Particle Class.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__class_number</span>
+
+    <span class="nd">@class_number</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">class_number</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__class_number</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{:d}</span><span class="s1"> </span><span class="si">{:d}</span><span class="s1"> </span><span class="si">{:d}</span><span class="s1"> &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">result</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="si">{:d}</span><span class="s1"> &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stack_index</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="si">{:10.4f}</span><span class="s1"> </span><span class="si">{:10.4f}</span><span class="s1"> </span><span class="si">{:10.4f}</span><span class="s1"> &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">shifts</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">result</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rotation</span><span class="o">.</span><span class="n">pos_string</span><span class="p">()</span>
+        <span class="n">result</span> <span class="o">+=</span> <span class="s1">&#39; </span><span class="si">{:d}</span><span class="s1"> &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">class_number</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="si">{:10.5f}</span><span class="s1"> </span><span class="si">{:10.5f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">score</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span>
+
+<div class="viewcode-block" id="Position.copy"><a class="viewcode-back" href="../i3assist.html#i3assist.Position.copy">[docs]</a>    <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns a copy of the position.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">Position</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="Position.to_trf"><a class="viewcode-back" href="../i3assist.html#i3assist.Position.to_trf">[docs]</a>    <span class="k">def</span> <span class="nf">to_trf</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the equivalent new I3 transform.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">           :obj:`i3assist.Transform`: New I3 equivalent orientation.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="s1">&#39;SUBSET &#39;</span>
+        <span class="n">result</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="si">{:d}</span><span class="s1"> </span><span class="si">{:d}</span><span class="s1"> </span><span class="si">{:d}</span><span class="s1"> &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">coordinates</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">inv_shifts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shifts</span> <span class="o">*</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="n">result</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="si">{: 19.14f}</span><span class="s1"> </span><span class="si">{: 19.14f}</span><span class="s1"> </span><span class="si">{: 19.14f}</span><span class="s1"> &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="o">*</span><span class="n">inv_shifts</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">inv_rotmat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rotation</span><span class="o">.</span><span class="n">to_matrix</span><span class="p">()</span><span class="o">.</span><span class="n">invert</span><span class="p">()</span>
+        <span class="n">result</span> <span class="o">+=</span> <span class="n">inv_rotmat</span><span class="o">.</span><span class="n">trf_string</span><span class="p">()</span>
+        <span class="n">result</span> <span class="o">+=</span> <span class="s1">&#39; </span><span class="si">{: 14.10f}</span><span class="s1"> &#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">score</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">+=</span> <span class="s1">&#39; </span><span class="si">{:d}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">class_number</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Transform</span><span class="p">(</span><span class="n">result</span><span class="p">)</span></div></div>
+
+<div class="viewcode-block" id="PositionList"><a class="viewcode-back" href="../stubs/i3assist.PositionList.html#i3assist.PositionList">[docs]</a><span class="k">class</span> <span class="nc">PositionList</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Describes a full position file as a list of Positions.</span>
+
+<span class="sd">    Refer to the documentation for Position objects</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        filename (:obj:`str`): Filename of pos file.</span>
+<span class="sd">        positions (:obj:`list` of :obj:`i3assist.Position`): List of</span>
+<span class="sd">            positions.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="PositionList.__init__"><a class="viewcode-back" href="../stubs/i3assist.PositionList.html#i3assist.PositionList.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">positions</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__filename</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="n">filename</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__positions</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">positions</span> <span class="o">=</span> <span class="n">positions</span></div>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">filename</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Filename associated with position list.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            value (:obj:`str`): Filename of pos file.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__filename</span>
+
+    <span class="nd">@filename</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">filename</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__filename</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">positions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;List of Position objects.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            value (:obj:`list` of :obj:`i3assist.Position`): List of</span>
+<span class="sd">                positions.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__positions</span>
+
+    <span class="nd">@positions</span><span class="o">.</span><span class="n">setter</span>
+    <span class="k">def</span> <span class="nf">positions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__positions</span> <span class="o">=</span> <span class="n">value</span>
+
+<div class="viewcode-block" id="PositionList.from_file"><a class="viewcode-back" href="../i3assist.html#i3assist.PositionList.from_file">[docs]</a>    <span class="k">def</span> <span class="nf">from_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Loads list of positions from a trf file.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            filename (:obj:`str`): Filename of pos file.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span> <span class="k">as</span> <span class="n">position_file</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">positions</span> <span class="o">=</span> <span class="p">[</span><span class="n">Position</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span> <span class="k">for</span> <span class="n">pos</span> <span class="ow">in</span> <span class="n">position_file</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="n">filename</span></div>
+
+    <span class="k">def</span> <span class="nf">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">positions</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">positions</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">positions</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+<div class="viewcode-block" id="PositionList.to_file"><a class="viewcode-back" href="../i3assist.html#i3assist.PositionList.to_file">[docs]</a>    <span class="k">def</span> <span class="nf">to_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Writes out a Position list to a pos file.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            filename (:obj:`str`): Name of file to write to.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">position_file</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">pos</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">positions</span><span class="p">:</span>
+                <span class="n">position_file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span></div></div>
+
+<span class="c1"># vim: textwidth=80 tabstop=8 expandtab shiftwidth=4 softtabstop=4:</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Dustin Reed Morado.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

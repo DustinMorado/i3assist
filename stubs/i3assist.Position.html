@@ -1,0 +1,300 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>i3assist.Position &mdash; i3assist 0.0.1 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="i3assist 0.0.1 documentation" href="../index.html"/>
+        <link rel="up" title="i3assist" href="../modules.html"/>
+        <link rel="next" title="i3assist.PositionList" href="i3assist.PositionList.html"/>
+        <link rel="prev" title="i3assist.GridSearch" href="i3assist.GridSearch.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> i3assist
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../modules.html">i3assist</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="i3assist.Euler.html">i3assist.Euler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="i3assist.RotationMatrix.html">i3assist.RotationMatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="i3assist.GridSearch.html">i3assist.GridSearch</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">i3assist.Position</a></li>
+<li class="toctree-l2"><a class="reference internal" href="i3assist.PositionList.html">i3assist.PositionList</a></li>
+<li class="toctree-l2"><a class="reference internal" href="i3assist.Transform.html">i3assist.Transform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="i3assist.TransformList.html">i3assist.TransformList</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../guides/basic.html">Basic Subtomogram Averaging with I3</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">i3assist</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../modules.html">i3assist</a> &raquo;</li>
+      
+    <li>i3assist.Position</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/stubs/i3assist.Position.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="i3assist-position">
+<h1>i3assist.Position<a class="headerlink" href="#i3assist-position" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="i3assist.Position">
+<em class="property">class </em><code class="descclassname">i3assist.</code><code class="descname">Position</code><span class="sig-paren">(</span><em>position_line</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/i3assist.html#Position"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#i3assist.Position" title="Permalink to this definition">¶</a></dt>
+<dd><p>A single particle transform in old I3.</p>
+<dl class="docutils">
+<dt>The fields in the position are broken down as follows:</dt>
+<dd><ol class="first last arabic simple">
+<li>Particle&#8217;s X coordinate in the tomogram <em>not used in alignment</em></li>
+<li>Particle&#8217;s Y coordinate in the tomogram <em>not used in alignment</em></li>
+<li>Particle&#8217;s Z coordinate in the tomogram <em>not used in alignment</em></li>
+<li>Particle&#8217;s 4D index in the stack of particles</li>
+<li>Particle&#8217;s displacement (shift) along X from center of volume.</li>
+<li>Particle&#8217;s displacement (shift) along Y from center of volume.</li>
+<li>Particle&#8217;s displacement (shift) along Z from center of volume.</li>
+<li>First euler angle in degrees about Z axis in range [-180, 180].</li>
+<li>Second euler angle in degrees about X axis in range [0, 180].</li>
+<li>Third euler angle in degrees about Z axis in range [-180, 180].</li>
+<li>Class number the particle belongs to.</li>
+<li>Max correlation coefficient between the particle and reference</li>
+<li>Unknown reserved value.</li>
+</ol>
+</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>positionLine</strong> (<code class="xref py py-obj docutils literal"><span class="pre">str</span></code>) &#8211; A string with the transform data.</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="i3assist.Position.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>position_line</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/i3assist.html#Position.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#i3assist.Position.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#i3assist.Position.__init__" title="i3assist.Position.__init__"><code class="xref py py-obj docutils literal"><span class="pre">__init__</span></code></a>(position_line)</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../i3assist.html#i3assist.Position.copy" title="i3assist.Position.copy"><code class="xref py py-obj docutils literal"><span class="pre">copy</span></code></a>()</td>
+<td>Returns a copy of the position.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../i3assist.html#i3assist.Position.to_trf" title="i3assist.Position.to_trf"><code class="xref py py-obj docutils literal"><span class="pre">to_trf</span></code></a>()</td>
+<td>Returns the equivalent new I3 transform.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="../i3assist.html#i3assist.Position.class_number" title="i3assist.Position.class_number"><code class="xref py py-obj docutils literal"><span class="pre">class_number</span></code></a></td>
+<td><code class="xref py py-obj docutils literal"><span class="pre">int</span></code> Class number that the particle belongs to.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../i3assist.html#i3assist.Position.coordinates" title="i3assist.Position.coordinates"><code class="xref py py-obj docutils literal"><span class="pre">coordinates</span></code></a></td>
+<td><code class="xref py py-obj docutils literal"><span class="pre">list</span></code> of <code class="xref py py-obj docutils literal"><span class="pre">int</span></code> Particles integer coordinates in tomogram.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../i3assist.html#i3assist.Position.rotation" title="i3assist.Position.rotation"><code class="xref py py-obj docutils literal"><span class="pre">rotation</span></code></a></td>
+<td><a class="reference internal" href="i3assist.Euler.html#i3assist.Euler" title="i3assist.Euler"><code class="xref py py-obj docutils literal"><span class="pre">i3assist.Euler</span></code></a> Euler angles rotating reference to particle.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../i3assist.html#i3assist.Position.score" title="i3assist.Position.score"><code class="xref py py-obj docutils literal"><span class="pre">score</span></code></a></td>
+<td><code class="xref py py-obj docutils literal"><span class="pre">float</span></code> Correlation score of particle alignment to reference.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../i3assist.html#i3assist.Position.shifts" title="i3assist.Position.shifts"><code class="xref py py-obj docutils literal"><span class="pre">shifts</span></code></a></td>
+<td><code class="xref py py-obj docutils literal"><span class="pre">list</span></code> of <code class="xref py py-obj docutils literal"><span class="pre">float</span></code> Particle displacements from box center.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../i3assist.html#i3assist.Position.stack_index" title="i3assist.Position.stack_index"><code class="xref py py-obj docutils literal"><span class="pre">stack_index</span></code></a></td>
+<td><code class="xref py py-obj docutils literal"><span class="pre">int</span></code> Fourth dimension coordinate of particle in stack.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="i3assist.PositionList.html" class="btn btn-neutral float-right" title="i3assist.PositionList" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="i3assist.GridSearch.html" class="btn btn-neutral" title="i3assist.GridSearch" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Dustin Reed Morado.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

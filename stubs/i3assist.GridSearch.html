@@ -1,0 +1,290 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>i3assist.GridSearch &mdash; i3assist 0.0.1 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="i3assist 0.0.1 documentation" href="../index.html"/>
+        <link rel="up" title="i3assist" href="../modules.html"/>
+        <link rel="next" title="i3assist.Position" href="i3assist.Position.html"/>
+        <link rel="prev" title="i3assist.RotationMatrix" href="i3assist.RotationMatrix.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> i3assist
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../modules.html">i3assist</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="i3assist.Euler.html">i3assist.Euler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="i3assist.RotationMatrix.html">i3assist.RotationMatrix</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">i3assist.GridSearch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="i3assist.Position.html">i3assist.Position</a></li>
+<li class="toctree-l2"><a class="reference internal" href="i3assist.PositionList.html">i3assist.PositionList</a></li>
+<li class="toctree-l2"><a class="reference internal" href="i3assist.Transform.html">i3assist.Transform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="i3assist.TransformList.html">i3assist.TransformList</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../guides/basic.html">Basic Subtomogram Averaging with I3</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">i3assist</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../modules.html">i3assist</a> &raquo;</li>
+      
+    <li>i3assist.GridSearch</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/stubs/i3assist.GridSearch.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="i3assist-gridsearch">
+<h1>i3assist.GridSearch<a class="headerlink" href="#i3assist-gridsearch" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="i3assist.GridSearch">
+<em class="property">class </em><code class="descclassname">i3assist.</code><code class="descname">GridSearch</code><span class="sig-paren">(</span><em>theta_max=0.0</em>, <em>theta_step=0.0</em>, <em>psi_max=0.0</em>, <em>psi_step=0.0</em>, <em>do_180=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/i3assist.html#GridSearch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#i3assist.GridSearch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describes the local grid search implemented in new I3.</p>
+<p>See the explanation in MRASRCH and the I3 subvolume tutorial for more
+information on how the grid search is implemented. But overall the grid is
+defined by four parameters: Nutation (theta) maximum and step and Spin
+(psi) maximum and step. Finally there is a do_180 parameter to support the
+old I3 eulerFG scripts, but this is not available in new I3.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>theta_max</strong> (<code class="xref py py-obj docutils literal"><span class="pre">float</span></code>, optional) &#8211; Maximum half-angle of a cone of
+nutation about the north pole of the unit sphere.</li>
+<li><strong>theta_step</strong> (<code class="xref py py-obj docutils literal"><span class="pre">float</span></code>, optional) &#8211; Angular increment of nutation.</li>
+<li><strong>psi_max</strong> (<code class="xref py py-obj docutils literal"><span class="pre">float</span></code>, optional) &#8211; Maximum absolute angle of spin about
+the orientation axis of the particle. Searched in both directions.</li>
+<li><strong>psi_step</strong> (<code class="xref py py-obj docutils literal"><span class="pre">float</span></code>, optional) &#8211; Angular increment of spin.</li>
+<li><strong>do_180</strong> (<code class="xref py py-obj docutils literal"><span class="pre">boolean</span></code>, optional) &#8211; If True the spins opposite of the
+current orientation&#8217;s facing will also be searched.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="i3assist.GridSearch.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>theta_max=0.0</em>, <em>theta_step=0.0</em>, <em>psi_max=0.0</em>, <em>psi_step=0.0</em>, <em>do_180=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/i3assist.html#GridSearch.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#i3assist.GridSearch.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#i3assist.GridSearch.__init__" title="i3assist.GridSearch.__init__"><code class="xref py py-obj docutils literal"><span class="pre">__init__</span></code></a>([theta_max,&nbsp;theta_step,&nbsp;psi_max,&nbsp;...])</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="../i3assist.html#i3assist.GridSearch.do_180" title="i3assist.GridSearch.do_180"><code class="xref py py-obj docutils literal"><span class="pre">do_180</span></code></a></td>
+<td><code class="xref py py-obj docutils literal"><span class="pre">boolean</span></code> Whether to search spins opposite particle facing.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../i3assist.html#i3assist.GridSearch.psi_max" title="i3assist.GridSearch.psi_max"><code class="xref py py-obj docutils literal"><span class="pre">psi_max</span></code></a></td>
+<td><code class="xref py py-obj docutils literal"><span class="pre">float</span></code> Max absolute angle of spin about the particle z-axis.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../i3assist.html#i3assist.GridSearch.psi_step" title="i3assist.GridSearch.psi_step"><code class="xref py py-obj docutils literal"><span class="pre">psi_step</span></code></a></td>
+<td><code class="xref py py-obj docutils literal"><span class="pre">float</span></code> Angular increment of spin.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../i3assist.html#i3assist.GridSearch.rotations" title="i3assist.GridSearch.rotations"><code class="xref py py-obj docutils literal"><span class="pre">rotations</span></code></a></td>
+<td><code class="xref py py-obj docutils literal"><span class="pre">list</span></code> of <a class="reference internal" href="i3assist.Euler.html#i3assist.Euler" title="i3assist.Euler"><code class="xref py py-obj docutils literal"><span class="pre">i3assist.Euler</span></code></a> Rotations searched in i3.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../i3assist.html#i3assist.GridSearch.theta_max" title="i3assist.GridSearch.theta_max"><code class="xref py py-obj docutils literal"><span class="pre">theta_max</span></code></a></td>
+<td><code class="xref py py-obj docutils literal"><span class="pre">float</span></code> Max half-angle of nutation about the north pole.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../i3assist.html#i3assist.GridSearch.theta_step" title="i3assist.GridSearch.theta_step"><code class="xref py py-obj docutils literal"><span class="pre">theta_step</span></code></a></td>
+<td><code class="xref py py-obj docutils literal"><span class="pre">float</span></code> Angular increment of nutation.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="i3assist.Position.html" class="btn btn-neutral float-right" title="i3assist.Position" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="i3assist.RotationMatrix.html" class="btn btn-neutral" title="i3assist.RotationMatrix" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Dustin Reed Morado.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

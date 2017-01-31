@@ -1,0 +1,310 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>i3assist.Euler &mdash; i3assist 0.0.1 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="i3assist 0.0.1 documentation" href="../index.html"/>
+        <link rel="up" title="i3assist" href="../modules.html"/>
+        <link rel="next" title="i3assist.RotationMatrix" href="i3assist.RotationMatrix.html"/>
+        <link rel="prev" title="i3assist" href="../modules.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> i3assist
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../modules.html">i3assist</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">i3assist.Euler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="i3assist.RotationMatrix.html">i3assist.RotationMatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="i3assist.GridSearch.html">i3assist.GridSearch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="i3assist.Position.html">i3assist.Position</a></li>
+<li class="toctree-l2"><a class="reference internal" href="i3assist.PositionList.html">i3assist.PositionList</a></li>
+<li class="toctree-l2"><a class="reference internal" href="i3assist.Transform.html">i3assist.Transform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="i3assist.TransformList.html">i3assist.TransformList</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../guides/basic.html">Basic Subtomogram Averaging with I3</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">i3assist</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../modules.html">i3assist</a> &raquo;</li>
+      
+    <li>i3assist.Euler</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/stubs/i3assist.Euler.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="i3assist-euler">
+<h1>i3assist.Euler<a class="headerlink" href="#i3assist-euler" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="i3assist.Euler">
+<em class="property">class </em><code class="descclassname">i3assist.</code><code class="descname">Euler</code><span class="sig-paren">(</span><em>phi=0.0</em>, <em>theta=0.0</em>, <em>psi=0.0</em>, <em>unit='deg'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/i3assist.html#Euler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#i3assist.Euler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describes a particle&#8217;s orientation using ZXZ extrinsic euler angles.</p>
+<p>The first rotation (phi) is about the z-axis (z).
+The second rotation (theta) is about the new x-axis (x&#8217;).
+The third rotation (psi) is about the new z-axis (z&#8217;&#8216;) after the second
+rotation.</p>
+<p>All rotations are of the coordinate axes and not of point coordinates.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>phi</strong> (<code class="xref py py-obj docutils literal"><span class="pre">float</span></code>, optional) &#8211; First rotation about the z-axis (z).</li>
+<li><strong>theta</strong> (<code class="xref py py-obj docutils literal"><span class="pre">float</span></code>, optional) &#8211; Second rotation about the new x-axis
+(x&#8217;).</li>
+<li><strong>psi</strong> (<code class="xref py py-obj docutils literal"><span class="pre">float</span></code>, optional) &#8211; Third rotation about the new z-axis
+(z&#8217;&#8216;).</li>
+<li><strong>unit</strong> (<code class="xref py py-obj docutils literal"><span class="pre">str</span></code>, optional) &#8211; Whether rotations are in degrees &#8220;deg&#8221; or
+radians &#8220;rad&#8221;.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="i3assist.Euler.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>phi=0.0</em>, <em>theta=0.0</em>, <em>psi=0.0</em>, <em>unit='deg'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/i3assist.html#Euler.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#i3assist.Euler.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#i3assist.Euler.__init__" title="i3assist.Euler.__init__"><code class="xref py py-obj docutils literal"><span class="pre">__init__</span></code></a>([phi,&nbsp;theta,&nbsp;psi,&nbsp;unit])</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../i3assist.html#i3assist.Euler.copy" title="i3assist.Euler.copy"><code class="xref py py-obj docutils literal"><span class="pre">copy</span></code></a>()</td>
+<td>Returns a copy of the euler object.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../i3assist.html#i3assist.Euler.degrees" title="i3assist.Euler.degrees"><code class="xref py py-obj docutils literal"><span class="pre">degrees</span></code></a>([inplace])</td>
+<td>Converts Euler object to describe rotations in units of degrees.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../i3assist.html#i3assist.Euler.invert" title="i3assist.Euler.invert"><code class="xref py py-obj docutils literal"><span class="pre">invert</span></code></a>([inplace])</td>
+<td>Returns a copy of euler object with inverted rotations.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../i3assist.html#i3assist.Euler.normalize" title="i3assist.Euler.normalize"><code class="xref py py-obj docutils literal"><span class="pre">normalize</span></code></a>([inplace])</td>
+<td>Returns a copy of euler object with rotations in old I3 bounds.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../i3assist.html#i3assist.Euler.pos_string" title="i3assist.Euler.pos_string"><code class="xref py py-obj docutils literal"><span class="pre">pos_string</span></code></a>()</td>
+<td>Returns string of angles in old I3 pos format.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../i3assist.html#i3assist.Euler.radians" title="i3assist.Euler.radians"><code class="xref py py-obj docutils literal"><span class="pre">radians</span></code></a>([inplace])</td>
+<td>Converts Euler object to describe rotations in units of radians.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../i3assist.html#i3assist.Euler.to_matrix" title="i3assist.Euler.to_matrix"><code class="xref py py-obj docutils literal"><span class="pre">to_matrix</span></code></a>()</td>
+<td>Returns the RotationMatrix object equivalent of Euler object.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../i3assist.html#i3assist.Euler.trf_string" title="i3assist.Euler.trf_string"><code class="xref py py-obj docutils literal"><span class="pre">trf_string</span></code></a>()</td>
+<td>Returns string of angles in new I3 trf format.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="../i3assist.html#i3assist.Euler.angles" title="i3assist.Euler.angles"><code class="xref py py-obj docutils literal"><span class="pre">angles</span></code></a></td>
+<td><code class="xref py py-obj docutils literal"><span class="pre">list</span></code> of <code class="xref py py-obj docutils literal"><span class="pre">float</span></code> &#8211; Array of rotations in order.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../i3assist.html#i3assist.Euler.phi" title="i3assist.Euler.phi"><code class="xref py py-obj docutils literal"><span class="pre">phi</span></code></a></td>
+<td><code class="xref py py-obj docutils literal"><span class="pre">float</span></code> &#8211; First rotation about the z-axis (z).</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../i3assist.html#i3assist.Euler.psi" title="i3assist.Euler.psi"><code class="xref py py-obj docutils literal"><span class="pre">psi</span></code></a></td>
+<td><code class="xref py py-obj docutils literal"><span class="pre">float</span></code> &#8211; Third rotation about the new z-axis (z&#8221;).</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../i3assist.html#i3assist.Euler.theta" title="i3assist.Euler.theta"><code class="xref py py-obj docutils literal"><span class="pre">theta</span></code></a></td>
+<td><code class="xref py py-obj docutils literal"><span class="pre">float</span></code> &#8211; Second rotation about the new x-axis (x&#8217;).</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../i3assist.html#i3assist.Euler.unit" title="i3assist.Euler.unit"><code class="xref py py-obj docutils literal"><span class="pre">unit</span></code></a></td>
+<td><code class="xref py py-obj docutils literal"><span class="pre">str</span></code> &#8211; Describes the unit of rotations as degrees or radians.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="i3assist.RotationMatrix.html" class="btn btn-neutral float-right" title="i3assist.RotationMatrix" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../modules.html" class="btn btn-neutral" title="i3assist" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Dustin Reed Morado.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

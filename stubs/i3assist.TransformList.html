@@ -1,0 +1,290 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>i3assist.TransformList &mdash; i3assist 0.0.1 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="i3assist 0.0.1 documentation" href="../index.html"/>
+        <link rel="up" title="i3assist" href="../modules.html"/>
+        <link rel="next" title="Basic Subtomogram Averaging with I3" href="../guides/basic.html"/>
+        <link rel="prev" title="i3assist.Transform" href="i3assist.Transform.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> i3assist
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../modules.html">i3assist</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="i3assist.Euler.html">i3assist.Euler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="i3assist.RotationMatrix.html">i3assist.RotationMatrix</a></li>
+<li class="toctree-l2"><a class="reference internal" href="i3assist.GridSearch.html">i3assist.GridSearch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="i3assist.Position.html">i3assist.Position</a></li>
+<li class="toctree-l2"><a class="reference internal" href="i3assist.PositionList.html">i3assist.PositionList</a></li>
+<li class="toctree-l2"><a class="reference internal" href="i3assist.Transform.html">i3assist.Transform</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">i3assist.TransformList</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../guides/basic.html">Basic Subtomogram Averaging with I3</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">i3assist</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../modules.html">i3assist</a> &raquo;</li>
+      
+    <li>i3assist.TransformList</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/stubs/i3assist.TransformList.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="i3assist-transformlist">
+<h1>i3assist.TransformList<a class="headerlink" href="#i3assist-transformlist" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="i3assist.TransformList">
+<em class="property">class </em><code class="descclassname">i3assist.</code><code class="descname">TransformList</code><span class="sig-paren">(</span><em>filename=''</em>, <em>transforms=[]</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/i3assist.html#TransformList"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#i3assist.TransformList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describes a full transform file with as a list of Transforms.</p>
+<p>For more information refer to the subvolume tutorial document for I3.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>filename</strong> (<code class="xref py py-obj docutils literal"><span class="pre">str</span></code>) &#8211; Filename of trf file.</li>
+<li><strong>transforms</strong> (<code class="xref py py-obj docutils literal"><span class="pre">list</span></code> of <a class="reference internal" href="i3assist.Transform.html#i3assist.Transform" title="i3assist.Transform"><code class="xref py py-obj docutils literal"><span class="pre">i3assist.Transform</span></code></a>) &#8211; List of
+transforms.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="i3assist.TransformList.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>filename=''</em>, <em>transforms=[]</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/i3assist.html#TransformList.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#i3assist.TransformList.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#i3assist.TransformList.__init__" title="i3assist.TransformList.__init__"><code class="xref py py-obj docutils literal"><span class="pre">__init__</span></code></a>([filename,&nbsp;transforms])</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../i3assist.html#i3assist.TransformList.from_file" title="i3assist.TransformList.from_file"><code class="xref py py-obj docutils literal"><span class="pre">from_file</span></code></a>(filename)</td>
+<td>Loads list of transforms from a trf file.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../i3assist.html#i3assist.TransformList.get_by_class" title="i3assist.TransformList.get_by_class"><code class="xref py py-obj docutils literal"><span class="pre">get_by_class</span></code></a>(class_number)</td>
+<td>Gets a subset of a transform list based on the class number.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../i3assist.html#i3assist.TransformList.get_by_subset" title="i3assist.TransformList.get_by_subset"><code class="xref py py-obj docutils literal"><span class="pre">get_by_subset</span></code></a>(subset)</td>
+<td>Gets a subset of a transform list based on the subset field.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../i3assist.html#i3assist.TransformList.scale" title="i3assist.TransformList.scale"><code class="xref py py-obj docutils literal"><span class="pre">scale</span></code></a>(scale_factor[,&nbsp;inplace])</td>
+<td>Scales all of the transforms in a list.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../i3assist.html#i3assist.TransformList.sort_by_class" title="i3assist.TransformList.sort_by_class"><code class="xref py py-obj docutils literal"><span class="pre">sort_by_class</span></code></a>([inplace])</td>
+<td>Sorts a transform list by class numbers.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="../i3assist.html#i3assist.TransformList.sort_by_score" title="i3assist.TransformList.sort_by_score"><code class="xref py py-obj docutils literal"><span class="pre">sort_by_score</span></code></a>([inplace])</td>
+<td>Sorts a transform list by correlation coefficient.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../i3assist.html#i3assist.TransformList.to_file" title="i3assist.TransformList.to_file"><code class="xref py py-obj docutils literal"><span class="pre">to_file</span></code></a>(filename)</td>
+<td>Writes out a Transform list to a trf file.</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Attributes</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="../i3assist.html#i3assist.TransformList.filename" title="i3assist.TransformList.filename"><code class="xref py py-obj docutils literal"><span class="pre">filename</span></code></a></td>
+<td>Filename associated with transform list.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="../i3assist.html#i3assist.TransformList.transforms" title="i3assist.TransformList.transforms"><code class="xref py py-obj docutils literal"><span class="pre">transforms</span></code></a></td>
+<td>List of Transform objects.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../guides/basic.html" class="btn btn-neutral float-right" title="Basic Subtomogram Averaging with I3" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="i3assist.Transform.html" class="btn btn-neutral" title="i3assist.Transform" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Dustin Reed Morado.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

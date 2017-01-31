@@ -1,0 +1,1379 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>i3assist module &mdash; i3assist 0.0.1 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="i3assist 0.0.1 documentation" href="index.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> i3assist
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">i3assist</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="guides/basic.html">Basic Subtomogram Averaging with I3</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">i3assist</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>i3assist module</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/i3assist.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-i3assist">
+<span id="i3assist-module"></span><h1>i3assist module<a class="headerlink" href="#module-i3assist" title="Permalink to this headline">¶</a></h1>
+<p>A module to help using I3 for sub-tomogram averaging.</p>
+<p>Written By Dustin Reed Morado
+Last updated 04.11.2016</p>
+<dl class="class">
+<dt id="i3assist.Euler">
+<em class="property">class </em><code class="descclassname">i3assist.</code><code class="descname">Euler</code><span class="sig-paren">(</span><em>phi=0.0</em>, <em>theta=0.0</em>, <em>psi=0.0</em>, <em>unit='deg'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/i3assist.html#Euler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#i3assist.Euler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Describes a particle&#8217;s orientation using ZXZ extrinsic euler angles.</p>
+<p>The first rotation (phi) is about the z-axis (z).
+The second rotation (theta) is about the new x-axis (x&#8217;).
+The third rotation (psi) is about the new z-axis (z&#8217;&#8216;) after the second
+rotation.</p>
+<p>All rotations are of the coordinate axes and not of point coordinates.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>phi</strong> (<code class="xref py py-obj docutils literal"><span class="pre">float</span></code>, optional) &#8211; First rotation about the z-axis (z).</li>
+<li><strong>theta</strong> (<code class="xref py py-obj docutils literal"><span class="pre">float</span></code>, optional) &#8211; Second rotation about the new x-axis
+(x&#8217;).</li>
+<li><strong>psi</strong> (<code class="xref py py-obj docutils literal"><span class="pre">float</span></code>, optional) &#8211; Third rotation about the new z-axis
+(z&#8217;&#8216;).</li>
+<li><strong>unit</strong> (<code class="xref py py-obj docutils literal"><span class="pre">str</span></code>, optional) &#8211; Whether rotations are in degrees &#8220;deg&#8221; or
+radians &#8220;rad&#8221;.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="i3assist.Euler.angles">
+<code class="descname">angles</code><a class="headerlink" href="#i3assist.Euler.angles" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="xref py py-obj docutils literal"><span class="pre">list</span></code> of <code class="xref py py-obj docutils literal"><span class="pre">float</span></code> &#8211; Array of rotations in order.</p>
+<p>Array is in the order phi, theta, psi</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>value</strong> (<code class="xref py py-obj docutils literal"><span class="pre">list</span></code> of <code class="xref py py-obj docutils literal"><span class="pre">float</span></code>) &#8211; List-type array of the three
+rotations.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="i3assist.Euler.copy">
+<code class="descname">copy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/i3assist.html#Euler.copy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#i3assist.Euler.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a copy of the euler object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Copy of Euler object.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="stubs/i3assist.Euler.html#i3assist.Euler" title="i3assist.Euler"><code class="xref py py-obj docutils literal"><span class="pre">i3assist.Euler</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="i3assist.Euler.degrees">
+<code class="descname">degrees</code><span class="sig-paren">(</span><em>inplace=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/i3assist.html#Euler.degrees"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#i3assist.Euler.degrees" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts Euler object to describe rotations in units of degrees.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>inplace</strong> (<code class="xref py py-obj docutils literal"><span class="pre">boolean</span></code>, optional) &#8211; If True conversion will be
+done in-place.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="docutils">
+<dt>Copy or self object with rotations in degree</dt>
+<dd>units.</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="stubs/i3assist.Euler.html#i3assist.Euler" title="i3assist.Euler"><code class="xref py py-obj docutils literal"><span class="pre">i3assist.Euler</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="i3assist.Euler.invert">
+<code class="descname">invert</code><span class="sig-paren">(</span><em>inplace=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/i3assist.html#Euler.invert"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#i3assist.Euler.invert" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a copy of euler object with inverted rotations.</p>
+<p>Again we can simply take the negative of psi, theta, phi to invert the
+rotatations but it is more theoretically clear to convert the angles to
+a rotation matrix, transpose it, and convert it back to angles. We also
+get the added benefit of normalizing the angles.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>inplace</strong> &#8211; If set to True the Euler angles will be changed in-place
+instead of returning a copy.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="docutils">
+<dt>Copy or self object describing the opposite</dt>
+<dd>rotation.</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="stubs/i3assist.Euler.html#i3assist.Euler" title="i3assist.Euler"><code class="xref py py-obj docutils literal"><span class="pre">i3assist.Euler</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="i3assist.Euler.normalize">
+<code class="descname">normalize</code><span class="sig-paren">(</span><em>inplace=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/i3assist.html#Euler.normalize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#i3assist.Euler.normalize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a copy of euler object with rotations in old I3 bounds.</p>
+<p>Old I3 requires that euler angles be given within the bounds:
+phi: -180 to 180
+theta: 0 to 180
+psi: -180 to 180</p>
+<p>There are many equivalent euler angle formats and we can normalize the
+angles using these identities, but these ranges correspond to the ranges
+given by the default C math arc trig functions, which are used in going
+from rotation matrix to Euler angles so we just convert to rotation
+matrix and then back to Euler angles.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>inplace</strong> &#8211; If set to True the Euler angles will be changed in-place
+instead of returning a copy.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="docutils">
+<dt>Copy or self object with rotations</dt>
+<dd>normalized to ranges required by old I3.</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="stubs/i3assist.Euler.html#i3assist.Euler" title="i3assist.Euler"><code class="xref py py-obj docutils literal"><span class="pre">i3assist.Euler</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="i3assist.Euler.phi">
+<code class="descname">phi</code><a class="headerlink" href="#i3assist.Euler.phi" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="xref py py-obj docutils literal"><span class="pre">float</span></code> &#8211; First rotation about the z-axis (z).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>value</strong> (<code class="xref py py-obj docutils literal"><span class="pre">float</span></code>) &#8211; New phi rotation.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="i3assist.Euler.pos_string">
+<code class="descname">pos_string</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/i3assist.html#Euler.pos_string"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#i3assist.Euler.pos_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns string of angles in old I3 pos format.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Old I3 pos format string of euler angles.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-obj docutils literal"><span class="pre">str</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="i3assist.Euler.psi">
+<code class="descname">psi</code><a class="headerlink" href="#i3assist.Euler.psi" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="xref py py-obj docutils literal"><span class="pre">float</span></code> &#8211; Third rotation about the new z-axis (z&#8221;).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>value</strong> (<code class="xref py py-obj docutils literal"><span class="pre">float</span></code>) &#8211; New psi rotation.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="i3assist.Euler.radians">
+<code class="descname">radians</code><span class="sig-paren">(</span><em>inplace=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/i3assist.html#Euler.radians"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#i3assist.Euler.radians" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts Euler object to describe rotations in units of radians.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>inplace</strong> (<code class="xref py py-obj docutils literal"><span class="pre">boolean</span></code>, optional) &#8211; If True conversion will be done
+in-place.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="docutils">
+<dt>Copy or self object with rotations in radian</dt>
+<dd>units.</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="stubs/i3assist.Euler.html#i3assist.Euler" title="i3assist.Euler"><code class="xref py py-obj docutils literal"><span class="pre">i3assist.Euler</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="i3assist.Euler.theta">
+<code class="descname">theta</code><a class="headerlink" href="#i3assist.Euler.theta" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="xref py py-obj docutils literal"><span class="pre">float</span></code> &#8211; Second rotation about the new x-axis (x&#8217;).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>value</strong> (<code class="xref py py-obj docutils literal"><span class="pre">float</span></code>) &#8211; New theta rotation.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="i3assist.Euler.to_matrix">
+<code class="descname">to_matrix</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/i3assist.html#Euler.to_matrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#i3assist.Euler.to_matrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the RotationMatrix object equivalent of Euler object.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><dl class="docutils">
+<dt>Rotation matrix describing the</dt>
+<dd>equivalent euler angles.</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="stubs/i3assist.RotationMatrix.html#i3assist.RotationMatrix" title="i3assist.RotationMatrix"><code class="xref py py-obj docutils literal"><span class="pre">i3assist.RotationMatrix</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="i3assist.Euler.trf_string">
+<code class="descname">trf_string</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/i3assist.html#Euler.trf_string"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#i3assist.Euler.trf_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns string of angles in new I3 trf format.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">New I3 trf format string of rotation matrix</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-obj docutils literal"><span class="pre">str</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="i3assist.Euler.unit">
+<code class="descname">unit</code><a class="headerlink" href="#i3assist.Euler.unit" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="xref py py-obj docutils literal"><span class="pre">str</span></code> &#8211; Describes the unit of rotations as degrees or radians.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>value</strong> (<code class="xref py py-obj docutils literal"><span class="pre">str</span></code>) &#8211; &#8220;deg&#8221; to set unit as degrees or &#8220;rad&#8221; to set
+unit as radians.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="i3assist.GridSearch">
+<em class="property">class </em><code class="descclassname">i3assist.</code><code class="descname">GridSearch</code><span class="sig-paren">(</span><em>theta_max=0.0</em>, <em>theta_step=0.0</em>, <em>psi_max=0.0</em>, <em>psi_step=0.0</em>, <em>do_180=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/i3assist.html#GridSearch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#i3assist.GridSearch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Describes the local grid search implemented in new I3.</p>
+<p>See the explanation in MRASRCH and the I3 subvolume tutorial for more
+information on how the grid search is implemented. But overall the grid is
+defined by four parameters: Nutation (theta) maximum and step and Spin
+(psi) maximum and step. Finally there is a do_180 parameter to support the
+old I3 eulerFG scripts, but this is not available in new I3.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>theta_max</strong> (<code class="xref py py-obj docutils literal"><span class="pre">float</span></code>, optional) &#8211; Maximum half-angle of a cone of
+nutation about the north pole of the unit sphere.</li>
+<li><strong>theta_step</strong> (<code class="xref py py-obj docutils literal"><span class="pre">float</span></code>, optional) &#8211; Angular increment of nutation.</li>
+<li><strong>psi_max</strong> (<code class="xref py py-obj docutils literal"><span class="pre">float</span></code>, optional) &#8211; Maximum absolute angle of spin about
+the orientation axis of the particle. Searched in both directions.</li>
+<li><strong>psi_step</strong> (<code class="xref py py-obj docutils literal"><span class="pre">float</span></code>, optional) &#8211; Angular increment of spin.</li>
+<li><strong>do_180</strong> (<code class="xref py py-obj docutils literal"><span class="pre">boolean</span></code>, optional) &#8211; If True the spins opposite of the
+current orientation&#8217;s facing will also be searched.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="i3assist.GridSearch.do_180">
+<code class="descname">do_180</code><a class="headerlink" href="#i3assist.GridSearch.do_180" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="xref py py-obj docutils literal"><span class="pre">boolean</span></code> Whether to search spins opposite particle facing.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>value</strong> (<code class="xref py py-obj docutils literal"><span class="pre">bool</span></code>) &#8211; True to search opposite facing spin angles.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="i3assist.GridSearch.psi_max">
+<code class="descname">psi_max</code><a class="headerlink" href="#i3assist.GridSearch.psi_max" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="xref py py-obj docutils literal"><span class="pre">float</span></code> Max absolute angle of spin about the particle z-axis.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>value</strong> (<code class="xref py py-obj docutils literal"><span class="pre">float</span></code>) &#8211; Max absolute spin angle in range 0 to 180.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="i3assist.GridSearch.psi_step">
+<code class="descname">psi_step</code><a class="headerlink" href="#i3assist.GridSearch.psi_step" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="xref py py-obj docutils literal"><span class="pre">float</span></code> Angular increment of spin.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>value</strong> (<code class="xref py py-obj docutils literal"><span class="pre">float</span></code>) &#8211; Spin angular increment in the range 0 to 180.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="i3assist.GridSearch.rotations">
+<code class="descname">rotations</code><a class="headerlink" href="#i3assist.GridSearch.rotations" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="xref py py-obj docutils literal"><span class="pre">list</span></code> of <a class="reference internal" href="stubs/i3assist.Euler.html#i3assist.Euler" title="i3assist.Euler"><code class="xref py py-obj docutils literal"><span class="pre">i3assist.Euler</span></code></a> Rotations searched in i3.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>params</strong> (<code class="xref py py-obj docutils literal"><span class="pre">tuple</span></code> of <code class="xref py py-obj docutils literal"><span class="pre">float</span></code> and <code class="xref py py-obj docutils literal"><span class="pre">boolean</span></code>) &#8211; A tuple
+with theta_max, theta_step, psi_max, psi_step, and do_180.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="i3assist.GridSearch.theta_max">
+<code class="descname">theta_max</code><a class="headerlink" href="#i3assist.GridSearch.theta_max" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="xref py py-obj docutils literal"><span class="pre">float</span></code> Max half-angle of nutation about the north pole.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>value</strong> (<code class="xref py py-obj docutils literal"><span class="pre">float</span></code>) &#8211; half-angle in the range 0 to 180.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="i3assist.GridSearch.theta_step">
+<code class="descname">theta_step</code><a class="headerlink" href="#i3assist.GridSearch.theta_step" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="xref py py-obj docutils literal"><span class="pre">float</span></code> Angular increment of nutation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>value</strong> (<code class="xref py py-obj docutils literal"><span class="pre">float</span></code>) &#8211; Angular increment in the range 0 to 180.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="i3assist.Position">
+<em class="property">class </em><code class="descclassname">i3assist.</code><code class="descname">Position</code><span class="sig-paren">(</span><em>position_line</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/i3assist.html#Position"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#i3assist.Position" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>A single particle transform in old I3.</p>
+<dl class="docutils">
+<dt>The fields in the position are broken down as follows:</dt>
+<dd><ol class="first last arabic simple">
+<li>Particle&#8217;s X coordinate in the tomogram <em>not used in alignment</em></li>
+<li>Particle&#8217;s Y coordinate in the tomogram <em>not used in alignment</em></li>
+<li>Particle&#8217;s Z coordinate in the tomogram <em>not used in alignment</em></li>
+<li>Particle&#8217;s 4D index in the stack of particles</li>
+<li>Particle&#8217;s displacement (shift) along X from center of volume.</li>
+<li>Particle&#8217;s displacement (shift) along Y from center of volume.</li>
+<li>Particle&#8217;s displacement (shift) along Z from center of volume.</li>
+<li>First euler angle in degrees about Z axis in range [-180, 180].</li>
+<li>Second euler angle in degrees about X axis in range [0, 180].</li>
+<li>Third euler angle in degrees about Z axis in range [-180, 180].</li>
+<li>Class number the particle belongs to.</li>
+<li>Max correlation coefficient between the particle and reference</li>
+<li>Unknown reserved value.</li>
+</ol>
+</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>positionLine</strong> (<code class="xref py py-obj docutils literal"><span class="pre">str</span></code>) &#8211; A string with the transform data.</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="i3assist.Position.class_number">
+<code class="descname">class_number</code><a class="headerlink" href="#i3assist.Position.class_number" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="xref py py-obj docutils literal"><span class="pre">int</span></code> Class number that the particle belongs to.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>value</strong> (<code class="xref py py-obj docutils literal"><span class="pre">int</span></code>) &#8211; Particle Class.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="i3assist.Position.coordinates">
+<code class="descname">coordinates</code><a class="headerlink" href="#i3assist.Position.coordinates" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="xref py py-obj docutils literal"><span class="pre">list</span></code> of <code class="xref py py-obj docutils literal"><span class="pre">int</span></code> Particles integer coordinates in tomogram.</p>
+<p>Coordinates are stored here as column arrays to help with using them
+with the rotation matrices.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>value</strong> (<code class="xref py py-obj docutils literal"><span class="pre">list</span></code> of <code class="xref py py-obj docutils literal"><span class="pre">int</span></code>) &#8211; List with 3 elements for
+particles coordinates relative to the raw tomogram it&#8217;s
+extracted from.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="i3assist.Position.copy">
+<code class="descname">copy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/i3assist.html#Position.copy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#i3assist.Position.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a copy of the position.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="i3assist.Position.rotation">
+<code class="descname">rotation</code><a class="headerlink" href="#i3assist.Position.rotation" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="stubs/i3assist.Euler.html#i3assist.Euler" title="i3assist.Euler"><code class="xref py py-obj docutils literal"><span class="pre">i3assist.Euler</span></code></a> Euler angles rotating reference to particle.</p>
+<p>In Old I3 the rotations are opposite the ones given in New I3. This
+could mean that previously alias rotations were used, but I think it is
+more likely that the rotations just describe the rotation of the
+reference.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>value</strong> (<code class="xref py py-obj docutils literal"><span class="pre">list</span></code> of <code class="xref py py-obj docutils literal"><span class="pre">float</span></code>) &#8211; Euler angles phi, theta, psi</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="i3assist.Position.score">
+<code class="descname">score</code><a class="headerlink" href="#i3assist.Position.score" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="xref py py-obj docutils literal"><span class="pre">float</span></code> Correlation score of particle alignment to reference.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>value</strong> (<code class="xref py py-obj docutils literal"><span class="pre">float</span></code>) &#8211; Correlation score.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="i3assist.Position.shifts">
+<code class="descname">shifts</code><a class="headerlink" href="#i3assist.Position.shifts" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="xref py py-obj docutils literal"><span class="pre">list</span></code> of <code class="xref py py-obj docutils literal"><span class="pre">float</span></code> Particle displacements from box center.</p>
+<p>Displacements are stored here as column arrays to help with using them
+with the rotation matrices. Again as for rotations, translations are
+alibi translations of the coordinate system and not the actual points.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>value</strong> (<code class="xref py py-obj docutils literal"><span class="pre">list</span></code> of <code class="xref py py-obj docutils literal"><span class="pre">float</span></code>) &#8211; List with 3 elements for
+particle&#8217;s shifts relative to their box center.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="i3assist.Position.stack_index">
+<code class="descname">stack_index</code><a class="headerlink" href="#i3assist.Position.stack_index" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="xref py py-obj docutils literal"><span class="pre">int</span></code> Fourth dimension coordinate of particle in stack.</p>
+<p>Old I3 used 4D stacks of particles as input. To keep the ability to
+transform coordinates with rotation matrices and shifts, the fourth
+dimension coordinate is given its own attribute.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>value</strong> (<code class="xref py py-obj docutils literal"><span class="pre">int</span></code>) &#8211; Particles&#8217; fourth dimension coordinate</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="i3assist.Position.to_trf">
+<code class="descname">to_trf</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/i3assist.html#Position.to_trf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#i3assist.Position.to_trf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the equivalent new I3 transform.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">New I3 equivalent orientation.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="stubs/i3assist.Transform.html#i3assist.Transform" title="i3assist.Transform"><code class="xref py py-obj docutils literal"><span class="pre">i3assist.Transform</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="i3assist.PositionList">
+<em class="property">class </em><code class="descclassname">i3assist.</code><code class="descname">PositionList</code><span class="sig-paren">(</span><em>filename=''</em>, <em>positions=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/i3assist.html#PositionList"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#i3assist.PositionList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Describes a full position file as a list of Positions.</p>
+<p>Refer to the documentation for Position objects</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>filename</strong> (<code class="xref py py-obj docutils literal"><span class="pre">str</span></code>) &#8211; Filename of pos file.</li>
+<li><strong>positions</strong> (<code class="xref py py-obj docutils literal"><span class="pre">list</span></code> of <a class="reference internal" href="stubs/i3assist.Position.html#i3assist.Position" title="i3assist.Position"><code class="xref py py-obj docutils literal"><span class="pre">i3assist.Position</span></code></a>) &#8211; List of
+positions.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="i3assist.PositionList.filename">
+<code class="descname">filename</code><a class="headerlink" href="#i3assist.PositionList.filename" title="Permalink to this definition">¶</a></dt>
+<dd><p>Filename associated with position list.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>value</strong> (<code class="xref py py-obj docutils literal"><span class="pre">str</span></code>) &#8211; Filename of pos file.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="i3assist.PositionList.from_file">
+<code class="descname">from_file</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/i3assist.html#PositionList.from_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#i3assist.PositionList.from_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads list of positions from a trf file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> (<code class="xref py py-obj docutils literal"><span class="pre">str</span></code>) &#8211; Filename of pos file.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="i3assist.PositionList.positions">
+<code class="descname">positions</code><a class="headerlink" href="#i3assist.PositionList.positions" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of Position objects.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>value</strong> (<code class="xref py py-obj docutils literal"><span class="pre">list</span></code> of <a class="reference internal" href="stubs/i3assist.Position.html#i3assist.Position" title="i3assist.Position"><code class="xref py py-obj docutils literal"><span class="pre">i3assist.Position</span></code></a>) &#8211; List of
+positions.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="i3assist.PositionList.to_file">
+<code class="descname">to_file</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/i3assist.html#PositionList.to_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#i3assist.PositionList.to_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes out a Position list to a pos file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> (<code class="xref py py-obj docutils literal"><span class="pre">str</span></code>) &#8211; Name of file to write to.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="i3assist.RotationMatrix">
+<em class="property">class </em><code class="descclassname">i3assist.</code><code class="descname">RotationMatrix</code><span class="sig-paren">(</span><em>angles=None</em>, <em>unit='deg'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/i3assist.html#RotationMatrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#i3assist.RotationMatrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Describes a particle&#8217;s orientation using ZXZ passive rotation matrix.</p>
+<p>The rotation matrix is the composition of three rotations matrices with
+the first and third being about the Z-axis and the second about the X-axis.</p>
+<p>All rotations are passive (alias) transformations of the coordinate axes
+and not of point coordinates (active / alibi).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>angles</strong> (<code class="xref py py-obj docutils literal"><span class="pre">list</span></code> of <code class="xref py py-obj docutils literal"><span class="pre">float</span></code>, optional) &#8211; Euler angles describing
+the rotation.</li>
+<li><strong>unit</strong> (<code class="xref py py-obj docutils literal"><span class="pre">str</span></code>, optional) &#8211; Whether rotations are in degrees &#8220;deg&#8221; or
+radians &#8220;rad&#8221;</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="i3assist.RotationMatrix.copy">
+<code class="descname">copy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/i3assist.html#RotationMatrix.copy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#i3assist.RotationMatrix.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a copy of the rotation matrix.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="i3assist.RotationMatrix.invert">
+<code class="descname">invert</code><span class="sig-paren">(</span><em>inplace=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/i3assist.html#RotationMatrix.invert"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#i3assist.RotationMatrix.invert" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns rotation matrix describing opposite rotation.</p>
+<p>Rotation matrices are orthogonal and hence their transpose is their
+inverse.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>inplace</strong> (<code class="xref py py-obj docutils literal"><span class="pre">boolean</span></code>, optional) &#8211; If True the operation will be
+done on the object in-place instead of returning a copy.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="docutils">
+<dt>Copy or self object of the inverted</dt>
+<dd>rotation matrix.</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="stubs/i3assist.RotationMatrix.html#i3assist.RotationMatrix" title="i3assist.RotationMatrix"><code class="xref py py-obj docutils literal"><span class="pre">i3assist.RotationMatrix</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="i3assist.RotationMatrix.matrix">
+<code class="descname">matrix</code><a class="headerlink" href="#i3assist.RotationMatrix.matrix" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="xref py py-obj docutils literal"><span class="pre">numpy.ndarray</span></code> &#8211; (3,3) matrix describing the rotation.</p>
+<p>Matrix is ordered in the standard format with the first index
+describing the row and the second index describing the column.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>value</strong> (<code class="xref py py-obj docutils literal"><span class="pre">numpy.ndarray</span></code>) &#8211; Euler angles in radians or Rotation
+matrix.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="i3assist.RotationMatrix.pos_string">
+<code class="descname">pos_string</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/i3assist.html#RotationMatrix.pos_string"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#i3assist.RotationMatrix.pos_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns string of angles in old I3 pos format.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Old I3 pos format string of euler angles.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-obj docutils literal"><span class="pre">str</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="i3assist.RotationMatrix.to_euler">
+<code class="descname">to_euler</code><span class="sig-paren">(</span><em>unit='deg'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/i3assist.html#RotationMatrix.to_euler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#i3assist.RotationMatrix.to_euler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts rotation matrix to equivalent euler angles.</p>
+<p>Algorithm from Chapter 1 of &#8220;Computational Methods for
+Three-Dimensional Microscopy Reconstruction&#8221; Ed. Joachim Frank, Gabor
+Herman.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>unit</strong> (<code class="xref py py-obj docutils literal"><span class="pre">str</span></code>, optional) &#8211; Whether to return the Euler angles in
+degrees or radians.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Euler angle equivalent of rotation matrix</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="stubs/i3assist.Euler.html#i3assist.Euler" title="i3assist.Euler"><code class="xref py py-obj docutils literal"><span class="pre">i3assist.Euler</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="i3assist.RotationMatrix.transpose">
+<code class="descname">transpose</code><span class="sig-paren">(</span><em>inplace=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/i3assist.html#RotationMatrix.transpose"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#i3assist.RotationMatrix.transpose" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns rotation matrix describing opposite rotation.</p>
+<p>Rotation matrices are orthogonal and hence their transpose is their
+inverse.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>inplace</strong> (<code class="xref py py-obj docutils literal"><span class="pre">boolean</span></code>, optional) &#8211; If True the operation will be
+done on the object in-place instead of returning a copy.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="docutils">
+<dt>Copy or self object of the inverted</dt>
+<dd>rotation matrix.</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="stubs/i3assist.RotationMatrix.html#i3assist.RotationMatrix" title="i3assist.RotationMatrix"><code class="xref py py-obj docutils literal"><span class="pre">i3assist.RotationMatrix</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="i3assist.RotationMatrix.trf_string">
+<code class="descname">trf_string</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/i3assist.html#RotationMatrix.trf_string"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#i3assist.RotationMatrix.trf_string" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns string of angles in new I3 trf format.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">New I3 trf format string of rotation matrix</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="xref py py-obj docutils literal"><span class="pre">str</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="i3assist.Transform">
+<em class="property">class </em><code class="descclassname">i3assist.</code><code class="descname">Transform</code><span class="sig-paren">(</span><em>transform_line</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/i3assist.html#Transform"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#i3assist.Transform" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>A single particle transform in new I3.</p>
+<p>For more information refer to the subvolume tutorial document for I3.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>transformLine</strong> (<code class="xref py py-obj docutils literal"><span class="pre">str</span></code>) &#8211; A string with the transform data.</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="i3assist.Transform.add_rotation">
+<code class="descname">add_rotation</code><span class="sig-paren">(</span><em>rotation</em>, <em>inplace=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/i3assist.html#Transform.add_rotation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#i3assist.Transform.add_rotation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a rotation in addition to particles current orientation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>rotation</strong> (<a class="reference internal" href="stubs/i3assist.RotationMatrix.html#i3assist.RotationMatrix" title="i3assist.RotationMatrix"><code class="xref py py-obj docutils literal"><span class="pre">i3assist.RotationMatrix</span></code></a>) &#8211; Rotation to add.</li>
+<li><strong>inplace</strong> &#8211; If True the operation will be done in-place and modify
+the transform instead of returning a copy.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Copy or self rotated transform object.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="stubs/i3assist.Transform.html#i3assist.Transform" title="i3assist.Transform"><code class="xref py py-obj docutils literal"><span class="pre">i3assist.Transform</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="i3assist.Transform.add_shift">
+<code class="descname">add_shift</code><span class="sig-paren">(</span><em>shift_x=0.0</em>, <em>shift_y=0.0</em>, <em>shift_z=0.0</em>, <em>inplace=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/i3assist.html#Transform.add_shift"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#i3assist.Transform.add_shift" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adjusts the particles defined center by an arbitrary vector.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>shift_x</strong> (<code class="xref py py-obj docutils literal"><span class="pre">float</span></code>, optional) &#8211; Amount to shift in x.</li>
+<li><strong>shift_y</strong> (<code class="xref py py-obj docutils literal"><span class="pre">float</span></code>, optional) &#8211; Amount to shift in y.</li>
+<li><strong>shift_z</strong> (<code class="xref py py-obj docutils literal"><span class="pre">float</span></code>, optional) &#8211; Amount to shift in z.</li>
+<li><strong>inplace</strong> (<code class="xref py py-obj docutils literal"><span class="pre">float</span></code>, optional) &#8211; If True the operation will be
+done in-place and modify thet transform instead of returning a
+copy.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Copy or self shifted transform object.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="stubs/i3assist.Transform.html#i3assist.Transform" title="i3assist.Transform"><code class="xref py py-obj docutils literal"><span class="pre">i3assist.Transform</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="i3assist.Transform.class_number">
+<code class="descname">class_number</code><a class="headerlink" href="#i3assist.Transform.class_number" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="xref py py-obj docutils literal"><span class="pre">int</span></code> Class number that the particle belongs to.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>value</strong> (<code class="xref py py-obj docutils literal"><span class="pre">int</span></code>) &#8211; Particle Class.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="i3assist.Transform.coordinates">
+<code class="descname">coordinates</code><a class="headerlink" href="#i3assist.Transform.coordinates" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="xref py py-obj docutils literal"><span class="pre">list</span></code> of <code class="xref py py-obj docutils literal"><span class="pre">int</span></code> Particles integer coordinates in tomogram.</p>
+<p>Coordinates are stored here as column arrays to help with using them
+with the rotation matrices.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>value</strong> (<code class="xref py py-obj docutils literal"><span class="pre">list</span></code> of <code class="xref py py-obj docutils literal"><span class="pre">int</span></code>) &#8211; List with 3 elements for
+particles coordinates relative to the tomogram map it&#8217;s
+extracted from.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="i3assist.Transform.copy">
+<code class="descname">copy</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/i3assist.html#Transform.copy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#i3assist.Transform.copy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a copy of the transform.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="i3assist.Transform.rotation">
+<code class="descname">rotation</code><a class="headerlink" href="#i3assist.Transform.rotation" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="stubs/i3assist.RotationMatrix.html#i3assist.RotationMatrix" title="i3assist.RotationMatrix"><code class="xref py py-obj docutils literal"><span class="pre">i3assist.RotationMatrix</span></code></a> Particles rotation matrix to orient.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>value</strong> (<code class="xref py py-obj docutils literal"><span class="pre">list</span></code> of <code class="xref py py-obj docutils literal"><span class="pre">float</span></code>) &#8211; Rotation matrix.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="i3assist.Transform.scale">
+<code class="descname">scale</code><span class="sig-paren">(</span><em>scale_factor</em>, <em>inplace=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/i3assist.html#Transform.scale"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#i3assist.Transform.scale" title="Permalink to this definition">¶</a></dt>
+<dd><p>Scale the transform to handle binning.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>scale_factor</strong> (<code class="xref py py-obj docutils literal"><span class="pre">float</span></code>) &#8211; Amount to scale transform by.</li>
+<li><strong>inplace</strong> &#8211; If True the operation will be done in-place and modify
+the transform instead of returning a copy.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Copy or self scaled transform object.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="stubs/i3assist.Transform.html#i3assist.Transform" title="i3assist.Transform"><code class="xref py py-obj docutils literal"><span class="pre">i3assist.Transform</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="i3assist.Transform.score">
+<code class="descname">score</code><a class="headerlink" href="#i3assist.Transform.score" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="xref py py-obj docutils literal"><span class="pre">float</span></code> Correlation score of particle alignment to reference.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>value</strong> (<code class="xref py py-obj docutils literal"><span class="pre">float</span></code>) &#8211; Correlation score.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="i3assist.Transform.shifts">
+<code class="descname">shifts</code><a class="headerlink" href="#i3assist.Transform.shifts" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="xref py py-obj docutils literal"><span class="pre">list</span></code> of <code class="xref py py-obj docutils literal"><span class="pre">float</span></code> Particle displacements from coordinates.</p>
+<p>Displacements are stored here as column arrays to help with using them
+with the rotation matrices. Again as for rotations translations are
+alibi translations of the coordinate system and not the actual points.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>value</strong> (<code class="xref py py-obj docutils literal"><span class="pre">list'</span> <span class="pre">of</span> <span class="pre">:obj`float</span></code>) &#8211; List with 3 elements for
+particles shifts relative to the center of the reference.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="i3assist.Transform.subset">
+<code class="descname">subset</code><a class="headerlink" href="#i3assist.Transform.subset" title="Permalink to this definition">¶</a></dt>
+<dd><p><code class="xref py py-obj docutils literal"><span class="pre">str</span></code> Subset identifier for particle.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>value</strong> (<code class="xref py py-obj docutils literal"><span class="pre">str</span></code>) &#8211; Subset name around 10 characters.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="i3assist.Transform.to_pos">
+<code class="descname">to_pos</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/i3assist.html#Transform.to_pos"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#i3assist.Transform.to_pos" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the equivalent old I3 position.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Old I3 equivalent orientation.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="stubs/i3assist.Position.html#i3assist.Position" title="i3assist.Position"><code class="xref py py-obj docutils literal"><span class="pre">i3assist.Position</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="i3assist.TransformList">
+<em class="property">class </em><code class="descclassname">i3assist.</code><code class="descname">TransformList</code><span class="sig-paren">(</span><em>filename=''</em>, <em>transforms=[]</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/i3assist.html#TransformList"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#i3assist.TransformList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Describes a full transform file with as a list of Transforms.</p>
+<p>For more information refer to the subvolume tutorial document for I3.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>filename</strong> (<code class="xref py py-obj docutils literal"><span class="pre">str</span></code>) &#8211; Filename of trf file.</li>
+<li><strong>transforms</strong> (<code class="xref py py-obj docutils literal"><span class="pre">list</span></code> of <a class="reference internal" href="stubs/i3assist.Transform.html#i3assist.Transform" title="i3assist.Transform"><code class="xref py py-obj docutils literal"><span class="pre">i3assist.Transform</span></code></a>) &#8211; List of
+transforms.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="i3assist.TransformList.append">
+<code class="descname">append</code><span class="sig-paren">(</span><em>transform</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/i3assist.html#TransformList.append"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#i3assist.TransformList.append" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a transform to the transform list.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>transform</strong> (<a class="reference internal" href="stubs/i3assist.Transform.html#i3assist.Transform" title="i3assist.Transform"><code class="xref py py-obj docutils literal"><span class="pre">i3assist.Transform</span></code></a>) &#8211; Transform to add to list.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="i3assist.TransformList.filename">
+<code class="descname">filename</code><a class="headerlink" href="#i3assist.TransformList.filename" title="Permalink to this definition">¶</a></dt>
+<dd><p>Filename associated with transform list.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>value</strong> (<code class="xref py py-obj docutils literal"><span class="pre">str</span></code>) &#8211; Filename of trf file.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="i3assist.TransformList.from_file">
+<code class="descname">from_file</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/i3assist.html#TransformList.from_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#i3assist.TransformList.from_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads list of transforms from a trf file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> (<code class="xref py py-obj docutils literal"><span class="pre">str</span></code>) &#8211; Filename of trf file.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="i3assist.TransformList.get_by_class">
+<code class="descname">get_by_class</code><span class="sig-paren">(</span><em>class_number</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/i3assist.html#TransformList.get_by_class"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#i3assist.TransformList.get_by_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets a subset of a transform list based on the class number.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>class_number</strong> (<code class="xref py py-obj docutils literal"><span class="pre">int</span></code>) &#8211; The class number to search for.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="docutils">
+<dt>Subset of self that matches the.</dt>
+<dd>class number requested.</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="stubs/i3assist.TransformList.html#i3assist.TransformList" title="i3assist.TransformList"><code class="xref py py-obj docutils literal"><span class="pre">i3assist.TransformList</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="i3assist.TransformList.get_by_subset">
+<code class="descname">get_by_subset</code><span class="sig-paren">(</span><em>subset</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/i3assist.html#TransformList.get_by_subset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#i3assist.TransformList.get_by_subset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets a subset of a transform list based on the subset field.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>subset</strong> (<code class="xref py py-obj docutils literal"><span class="pre">str</span></code>) &#8211; The subset field to search for.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><dl class="docutils">
+<dt>Subset of self that matches the.</dt>
+<dd>subset requested.</dd>
+</dl>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="stubs/i3assist.TransformList.html#i3assist.TransformList" title="i3assist.TransformList"><code class="xref py py-obj docutils literal"><span class="pre">i3assist.TransformList</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="i3assist.TransformList.scale">
+<code class="descname">scale</code><span class="sig-paren">(</span><em>scale_factor</em>, <em>inplace=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/i3assist.html#TransformList.scale"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#i3assist.TransformList.scale" title="Permalink to this definition">¶</a></dt>
+<dd><p>Scales all of the transforms in a list.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>scale_factor</strong> (<code class="xref py py-obj docutils literal"><span class="pre">float</span></code>) &#8211; Amount which to scale the transforms.</li>
+<li><strong>inplace</strong> &#8211; If True, scaling will be done in-place instead of
+returning a copy.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Scaled transform list.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="stubs/i3assist.TransformList.html#i3assist.TransformList" title="i3assist.TransformList"><code class="xref py py-obj docutils literal"><span class="pre">i3assist.TransformList</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="i3assist.TransformList.sort_by_class">
+<code class="descname">sort_by_class</code><span class="sig-paren">(</span><em>inplace=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/i3assist.html#TransformList.sort_by_class"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#i3assist.TransformList.sort_by_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sorts a transform list by class numbers.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>inplace</strong> &#8211; If True the list is not returned and the sorting is done
+in-place. Otherwise a sorted copy is returned.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Transform list sorted by class.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="stubs/i3assist.TransformList.html#i3assist.TransformList" title="i3assist.TransformList"><code class="xref py py-obj docutils literal"><span class="pre">i3assist.TransformList</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="i3assist.TransformList.sort_by_score">
+<code class="descname">sort_by_score</code><span class="sig-paren">(</span><em>inplace=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/i3assist.html#TransformList.sort_by_score"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#i3assist.TransformList.sort_by_score" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sorts a transform list by correlation coefficient.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>inplace</strong> &#8211; If True the list is not returned and the sorting is done
+in-place. Otherwise a sorted copy is returned.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Transform list sorted by score.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="stubs/i3assist.TransformList.html#i3assist.TransformList" title="i3assist.TransformList"><code class="xref py py-obj docutils literal"><span class="pre">i3assist.TransformList</span></code></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="i3assist.TransformList.to_file">
+<code class="descname">to_file</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/i3assist.html#TransformList.to_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#i3assist.TransformList.to_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes out a Transform list to a trf file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> (<code class="xref py py-obj docutils literal"><span class="pre">str</span></code>) &#8211; Name of file to write to.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="i3assist.TransformList.transforms">
+<code class="descname">transforms</code><a class="headerlink" href="#i3assist.TransformList.transforms" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of Transform objects.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>value</strong> (<code class="xref py py-obj docutils literal"><span class="pre">list</span></code> of <a class="reference internal" href="stubs/i3assist.Transform.html#i3assist.Transform" title="i3assist.Transform"><code class="xref py py-obj docutils literal"><span class="pre">i3assist.Transform</span></code></a>) &#8211; List of
+transforms.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Dustin Reed Morado.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
