@@ -1045,10 +1045,11 @@ class TransformList(object):
             raise ValueError("Transform list does not contain scores.")
         else:
             if inplace is True:
-                self.transforms.sort(key=lambda trf: trf.score)
+                self.transforms.sort(key=lambda trf: trf.score, reverse=True)
             else:
                 sorted_transforms = sorted(self.transforms,
-                                           key=lambda trf: trf.score)
+                                           key=lambda trf: trf.score,
+                                           reverse=True)
                 return TransformList(filename=self.filename,
                                      transforms=sorted_transforms)
 
