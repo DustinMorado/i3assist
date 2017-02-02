@@ -966,7 +966,7 @@ class TransformList(object):
             transforms.
 
     """
-    def __init__(self, filename='', transforms=[]):
+    def __init__(self, filename='', transforms=None):
         self.__filename = None
         self.filename = filename
         self.__transforms = None
@@ -999,7 +999,10 @@ class TransformList(object):
 
     @transforms.setter
     def transforms(self, value):
-        self.__transforms = value
+        if value is None:
+            self.__transforms = []
+        else:
+            self.__transforms = value
 
     def from_file(self, filename):
         """Loads list of transforms from a trf file.
